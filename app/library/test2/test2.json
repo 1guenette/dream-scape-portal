@@ -1,0 +1,83 @@
+{
+    "title": "Test APP",
+    "start": "1",
+    "steps": {
+        "1": {
+            "prompt": "Hello world",
+            "ending": false,
+            "image": "/pic1.png",
+            "options": [
+                {
+                    "id": 1,
+                    "description": "Go to friend",
+                    "redirect": true,
+                    "next": "2"
+                },
+                {
+                    "id": 2,
+                    "description": "Escape through tunnel",
+                    "redirect": true,
+                    "next": "3"
+                }
+            ]
+        },
+        "2": {
+            "prompt": "Your friend isdfou do?",
+            "ending": false,
+            "image": "/pic2.png",
+            "options": [
+                {
+                    "id": 1,
+                    "description": "read note",
+                    "redirect": false,
+                    "popupNote": "You are not able to read the note. It is too dark",
+                    "next": "2"
+                },
+                {
+                    "id": 2,
+                    "description": "try to talk to friend",
+                    "redirect": false,
+                    "popupNote": "Your friend is too weak to speak, His brittle hand timidly waves the note",
+                    "next": "2"
+                },
+                {
+                    "id": 4,
+                    "description": "Escape through tunnel",
+                    "redirect": true,
+                    "next": "3"
+                }
+            ]
+        },
+        "3": {
+            "prompt": "You escape to the outside world. A boat is seen over the horizon. You are on your way to a new paradise.",
+            "image": "/pic4.png",
+            "ending": true
+        },
+        "4": {
+            "prompt": "The note reads, \"Don't leave me here\" what do you do ",
+            "ending": false,
+            "image": "/pic3.png",
+            "options": [
+                {
+                    "id": 1,
+                    "description": "Escape through tunnel",
+                    "redirect": true,
+                    "next": "3"
+
+                },
+                {
+                    "id": 2,
+                    "description": "Sit down with friend",
+                    "redirect": true,
+                    "next": "5"
+                }
+            ]
+        },
+        "5": {
+            "prompt": "You sit with your friend. Darkness becomes light. And paradise was always here.",
+            "image": "/pic5.png",
+            "ending": true
+           
+        }
+    }
+}
