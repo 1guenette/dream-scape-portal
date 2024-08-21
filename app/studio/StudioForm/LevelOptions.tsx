@@ -1,6 +1,6 @@
 'use client'
 import {
-    Accordion, AccordionItem, Table, TableHeader, TableColumn, TableBody,
+    Accordion, AccordionItem, Table, TableHeader, TableColumn, TableBody, Checkbox,
     TableRow, TableCell, Input, Divider, Button, Card, CardHeader, CardBody, CardFooter,
     Select, SelectItem
 } from "@nextui-org/react";
@@ -41,23 +41,48 @@ export const existingOptions = [
 ]
 
 
+
 export default function LevelOptions(data: any) {
 
-    const [options, setOptions] = useState(existingOptions) //TODO: replace with inherited options
+    const [options, setOptions] = useState([{option: "enter the good room", loopBack: false, loopBackText: null}, {option: "enter the bad room", loopBack: true, loopBackText: "bad room is locked"}]) //TODO: replace with inherited options
 
-    function generateExistingOptions(){
-        options.map((opt)=>{
-            return <><div className="col-span-10 ...">
-                    <Input type="text" className="form-control" id="levelName" placeholder="Enter option" defaultValue="escape me"/>
+
+    function updateLoopBack(index, loopVal){
+
+        console.log(index)
+        console.log(loopVal)
+        let updateOptions = options
+        updateOptions[index].loopBack = !updateOptions[index].loopBack
+        setOptions(updateOptions)
+        displayOptions()
+        
+    }
+
+
+
+    //TODO: Make separate component for level option
+    function displayOptions() {
+        return options.map((opt, i) => {
+            return <>
+                <div className="col-span-9 ...">
+                    <Input type="text" className="form-control" id="levelName" placeholder="Enter option" defaultValue={opt.option} />
                 </div>
 
-                <div className="col-start-12 ...">
+                <div className="col-start-10 ...">
                     <div className="form-check m-2">
-                        <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                        <p className="form-check-label">Loop Back</p>
+                        <Checkbox defaultSelected={opt.loopBack} onChange={()=> updateLoopBack(i, opt.loopBack)}>Loop Back</Checkbox>
                     </div>
-                </div></>
+                </div>
+
+                <div className="col-start-11 ..." hidden={!opt.loopBack}>
+                <Input type="text" className="form-control" id="levelName" placeholder="Enter option" defaultValue={opt.option} />
+                </div>
+                </>
         })
+    }
+
+    function addOption(){
+        setOptions([...options, {option: "enter the good room", loopBack: false, loopBackText: null}])
     }
 
     return (
@@ -65,13 +90,13 @@ export default function LevelOptions(data: any) {
 
 
         <div>
-
             <div className="row">
                 <p>Options:</p>
             </div>
 
-            <div className="grid grid-cols-4 gap-4">
-                <div className="col-span-10 ...">
+            <div className="grid grid-cols gap-4">
+                {displayOptions()}
+                {/* <div className="col-span-10 ...">
                     <Input className="form-control" id="levelName" placeholder="Enter option" defaultValue="testDefault"/>
                 </div>
 
@@ -80,12 +105,12 @@ export default function LevelOptions(data: any) {
                         <input type="checkbox" className="form-check-input" id="exampleCheck1" />
                         <p className="form-check-label">Loop Back</p>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             <div className="grid grid-cols-4 gap-2">
                 <div className="col-start-12 ...">
-                    <Button>Add Option</Button>
+                    <Button onClick={addOption}>Add Option</Button>
                 </div>
             </div>
         </div>
