@@ -6,56 +6,46 @@ import {
 } from "@nextui-org/react";
 import Dropdown from "../dropdown";
 import "../graph.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import LoopBackOption from "./LoopBackOption";
 // import "bootstrap/dist/css/bootstrap.min.css"
 
 
 
-export const existingOptions = [
-    {
-        "id": 1,
-        "description": "read note",
-        "redirect": false,
-        "popupNote": "You are not able to read the note. It is too dark",
-        "next": "2"
-    },
-    {
-        "id": 2,
-        "description": "try to talk to friend",
-        "redirect": false,
-        "popupNote": "Your friend is too weak to speak, His brittle hand timidly waves the note",
-        "next": "2"
-    },
-    {
-        "id": 3,
-        "description": "light match",
-        "redirect": true,
-        "next": "4"
-    },
-    {
-        "id": 4,
-        "description": "Escape through tunnel",
-        "redirect": true,
-        "next": "3"
-    }
-]
+
+export default function LevelOptions(props) {
 
 
 
-export default function LevelOptions(data: any) {
-
-    const [options, setOptions] = useState([{option: "enter the good room", loopBack: false, loopBackText: null}, {option: "enter the bad room", loopBack: true, loopBackText: "bad room is locked"}]) //TODO: replace with inherited options
-
-
-    function updateLoopBack(index, loopVal){
-
-        console.log(index)
-        console.log(loopVal)
+    const [options, setOptions] = useState([]) //TODO: replace with inherited options
+    
+    const updateLoopBack = (index, loopVal)=> {
+        console.log("XXXX")
         let updateOptions = options
-        updateOptions[index].loopBack = !updateOptions[index].loopBack
+        updateOptions[index].loopBack = loopVal
         setOptions(updateOptions)
-        displayOptions()
+        props.updateOptions(updateOptions)
+        // displayOptions()
         
+    }
+
+    function updateLoopBackInput(index, input) {
+        console.log("YYYYY")
+        let updateOptions = options
+        updateOptions[index].loopBackText = input
+        setOptions(updateOptions)
+        props.updateOptions(updateOptions)
+        // displayOptions()
+
+    }
+
+    function updateOptionInput(e){
+        console.log("ZZZZ")
+
+        let updateOptions = options
+        updateOptions[e.target.id].option = e.target.value
+        setOptions(updateOptions)
+        props.updateOptions(updateOptions)
     }
 
 
@@ -65,24 +55,15 @@ export default function LevelOptions(data: any) {
         return options.map((opt, i) => {
             return <>
                 <div className="col-span-9 ...">
-                    <Input type="text" className="form-control" id="levelName" placeholder="Enter option" defaultValue={opt.option} />
+                    <Input key={i} index={i} type="text" className="form-control" id={i} placeholder="Enter option" defaultValue={opt.option} onChange={updateOptionInput}/>
                 </div>
-
-                <div className="col-start-10 ...">
-                    <div className="form-check m-2">
-                        <Checkbox defaultSelected={opt.loopBack} onChange={()=> updateLoopBack(i, opt.loopBack)}>Loop Back</Checkbox>
-                    </div>
-                </div>
-
-                <div className="col-start-11 ..." hidden={!opt.loopBack}>
-                <Input type="text" className="form-control" id="levelName" placeholder="Enter option" defaultValue={opt.option} />
-                </div>
+                    <LoopBackOption index={i} loopBack={opt.loopBack} updateLoopBack={updateLoopBack} updateLoopBackInput={updateLoopBackInput} inputValue={opt.option}/>
                 </>
         })
     }
 
     function addOption(){
-        setOptions([...options, {option: "enter the good room", loopBack: false, loopBackText: null}])
+        setOptions([...options, {option: null, loopBack: false, loopBackText: null}])
     }
 
     return (
@@ -96,16 +77,6 @@ export default function LevelOptions(data: any) {
 
             <div className="grid grid-cols gap-4">
                 {displayOptions()}
-                {/* <div className="col-span-10 ...">
-                    <Input className="form-control" id="levelName" placeholder="Enter option" defaultValue="testDefault"/>
-                </div>
-
-                <div className="col-start-12 ...">
-                    <div className="form-check m-2">
-                        <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                        <p className="form-check-label">Loop Back</p>
-                    </div>
-                </div> */}
             </div>
 
             <div className="grid grid-cols-4 gap-2">

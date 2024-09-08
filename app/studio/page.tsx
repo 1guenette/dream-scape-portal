@@ -1,9 +1,9 @@
 'use client'
-import { Row} from "@nextui-org/react";
 import Dropdown from "./dropdown";
 import { Tree, AnimatedTree } from 'react-tree-graph';
 import StoryForm from './StudioForm/StoryForm'
 import Tree2 from "./StudioForm/Tree2";
+import { useState } from "react";
 // import "./graph.css";
 // import "../globals.css";
 // import "bootstrap/dist/css/bootstrap.min.css"
@@ -14,138 +14,73 @@ import Tree2 from "./StudioForm/Tree2";
 
 export default function Studio() {
 
-  const data = {
-    name: 'Parent',
-    children: [
-      {
-        name: 'Child One',
-        children: [
-          {
-            name: 'Child One'
-          },
-          {
-            name: 'Child Two'
-          }
-        ]
-      },
-      {
-        name: 'Child Two',
-        children: [
-          {
-            name: 'Child One',
-            children: [
-              {
-                name: 'Child One'
-              },
-              {
-                name: 'Child Two'
-              }
-            ]
-          },
-          {
-            name: 'Child Two',
-            children: [
-              {
-                name: 'Child One',
-                children: [
-                  {
-                    name: 'Child One'
-                  },
-                  {
-                    name: 'Child Two',
-                    children: [
-                      {
-                        name: 'Child One'
-                      },
-                      {
-                        name: 'Child Two',
-                        children: [
-                          {
-                            name: 'Child One'
-                          },
-                          {
-                            name: 'Child Two',
-                            children: [
-                              {
-                                name: 'Child One'
-                              },
-                              {
-                                name: 'Child Two',
-                                children: [
-                                  {
-                                    name: 'Child One'
-                                  },
-                                  {
-                                    name: 'Child Two',
-                                    children: [
-                                      {
-                                        name: 'Child One',
-                                        children: [
-                                          {
-                                            name: 'Child One'
-                                          },
-                                          {
-                                            name: 'Child Two',
-                                            children: [
-                                              {
-                                                name: 'Child One'
-                                              },
-                                              {
-                                                name: 'Child Two',
-                                                children: [
-                                                  {
-                                                    name: 'Child One'
-                                                  },
-                                                  {
-                                                    name: 'Child Two'
-                                                  }
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        name: 'Child Two',
-                                        children: [
-                                          {
-                                            name: 'Child One'
-                                          },
-                                          {
-                                            name: 'Child Two',
-                                            children: [
-                                              {
-                                                name: 'Child One'
-                                              },
-                                              {
-                                                name: 'Child Two'
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                name: 'Child Two'
-              }
-            ]
-          }
-        ]
-      }
-    ]
+  const dataTest = {
+    name: 'Root',
+    // children: [
+    //   {
+    //     name: 'Child One',
+    //     children: [
+    //       {
+    //         name: 'Child One'
+    //       },
+    //       {
+    //         name: 'Child Two'
+    //       }
+    //     ]
+    //   },
 
   }
+
+  const [data, setData] = useState({})
+  const [treeData, setTreeData] = useState({})
+
+  function updateStory(levelData){
+    console.log("Updating Story")
+    console.log(levelData)
+    setData(levelData)
+    updateTreeGraphic(levelData)
+
+
+  }
+
+  function updateTreeGraphic(data){
+
+  //   {
+  //     "levelName": "test",
+  //     "levelPrompt": "test prompt",
+  //     "options": [
+  //         {
+  //             "option": "enter the good room",
+  //             "loopBack": false,
+  //             "loopBackText": "no"
+  //         },
+  //         {
+  //             "option": "enter the good room",
+  //             "loopBack": false,
+  //             "loopBackText": null
+  //         }
+  //     ]
+  // }
+
+
+
+  // if root   
+    if (!treeData.children){
+      let updatedTree = {name: data.levelName}
+      updatedTree.children = data.options.map((val)=>{
+        console.log("XXXXX")
+        console.log(val)
+        return {name: val.option, children:[]}
+      })
+      console.log("UPDATING TREE")
+      console.log(updatedTree)
+      setTreeData(updatedTree)
+    }
+    else{
+
+    }
+  }
+
 
 
   return (
@@ -153,9 +88,9 @@ export default function Studio() {
     <main className="dark text-foreground bg-background">
       <div style={{overflowX: "scroll"}}>
         <AnimatedTree
-          data={data}
+          data={treeData}
           height={400}
-          width={1600}
+          width={400}
           svgProps={{
             className: 'custom'
           }}
@@ -166,7 +101,7 @@ export default function Studio() {
         />
       </div>
       <div className="flex items-center justify-center">
-        <StoryForm data={data} />
+        <StoryForm data={data} updateStory={updateStory}/>
       </div>
     </main>
   )

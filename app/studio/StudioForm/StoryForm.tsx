@@ -9,25 +9,36 @@ import "../graph.css";
 // import "bootstrap/dist/css/bootstrap.min.css"
 import { useState } from "react";
 
+//[{option: "enter the good room", loopBack: false, loopBackText: null}, {option: "enter the bad room", loopBack: true, loopBackText: "bad room is locked"}]
 
 
-export default function StoryForm(data:any, leveOptions:any) {
+export default function StoryForm(props) {
 
-const options = useState(leveOptions)
+const [options, setOptions] = useState([])
 const [image, setImage] = useState(null);
 
 function processSubmission(e){
 
   e.preventDefault()
-  console.log("-----------")
   const levelName = e.target.levelName[0].value
   const levelPrompt = e.target.levelPrompt.value
+  const image = e.target[2].value
+  let levelData = {levelName:levelName, levelPrompt: levelPrompt, options: options }
+
+  props.updateStory(levelData)
+
+  
 
   //'Content-Type': 'multipart/form-data' header needed for axios submission
 }
 
 function handleImageChange(e){
   setImage(e.target.files[0]);
+}
+
+function updateOptions(opts){
+  setOptions(opts)
+
 }
 
 
@@ -57,7 +68,7 @@ function handleImageChange(e){
           <Divider/>
 
           <div className="form-check m-2">
-            <LevelOptions data={null}/>
+            <LevelOptions updateOptions={updateOptions}/>
           </div>
 
 
