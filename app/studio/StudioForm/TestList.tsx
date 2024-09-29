@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import LoopBackOption from "./LoopBackOption";
 import { skip } from "node:test";
 
-function LevelOptions(props:any) {
+function TestList() {
   const [options, setOptions] = useState<any[]>([])
 
   // Function to add a new empty input field to the list
@@ -30,14 +30,11 @@ function LevelOptions(props:any) {
       }
     })
     setOptions(newOptions)
-    props.updateOptions(newOptions)
-    
   };
 
   function deleteOption(index) {
     const newInputs = options.filter((_, i) => i !== index);
     setOptions(newInputs);
-    props.updateOptions(newInputs)
   };
 
   function updateLoopBack(index, value) {
@@ -53,7 +50,6 @@ function LevelOptions(props:any) {
       }
     })
     setOptions(newOptions)
-    props.updateOptions(newOptions)
   }
 
   function updateLoopBackInput(index, value) {
@@ -68,7 +64,6 @@ function LevelOptions(props:any) {
       }
     })
     setOptions(newOptions)
-    props.updateOptions(newOptions)
   };
 
 
@@ -78,14 +73,12 @@ function LevelOptions(props:any) {
 
       {options.map((option, index) => (
         <>
-        <div className="grid grid-cols gap-1">
           <div className="col-start-1 col-span-5 ..." >
             <Input
               type="text"
               value={option.input}
               onChange={(e) => handleInputChange(index, e.target.value)}
               placeholder="Enter value"
-              isRequired
             />
           </div>
           <div className="col-start-6 ...">
@@ -104,11 +97,10 @@ function LevelOptions(props:any) {
           <div className="col-start-11 ...">
             <Button color="danger" variant="bordered" onClick={() => deleteOption(index)}>Delete</Button>
           </div>
-          </div>
         </>
 
       ))}
     </div>
   );
 };
-export default LevelOptions;
+export default TestList;

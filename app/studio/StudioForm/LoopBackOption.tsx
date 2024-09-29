@@ -32,14 +32,16 @@ export default function LoopBackOption(props: any) {
     
     return (
         <>
-            <div className="col-start-10 ...">
+         <div className="grid grid-cols gap-1">
+            <div className="col-start-1 ...">
                 <div className="form-check m-2">
                     <Checkbox defaultSelected={props.loopBack}  onClick={updateCheckbox} >Loop Back</Checkbox>
                 </div>
             </div>
 
-            <div className="col-start-11 ..." hidden={!checked}>
+            <div className="col-start-6 ..." hidden={!checked}>
                 <Input type="text" className="form-control" id="levelName" placeholder="Enter option" onChange={updateInput}/>
+            </div>
             </div>
         </>
     )

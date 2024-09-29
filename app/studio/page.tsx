@@ -40,45 +40,31 @@ export default function Studio() {
     setData(levelData)
     updateTreeGraphic(levelData)
 
-
   }
 
   function updateTreeGraphic(data){
 
-  //   {
-  //     "levelName": "test",
-  //     "levelPrompt": "test prompt",
-  //     "options": [
-  //         {
-  //             "option": "enter the good room",
-  //             "loopBack": false,
-  //             "loopBackText": "no"
-  //         },
-  //         {
-  //             "option": "enter the good room",
-  //             "loopBack": false,
-  //             "loopBackText": null
-  //         }
-  //     ]
-  // }
-
-
-
   // if root   
-    if (!treeData.children){
+    // if (!treeData.children){
+      console.log("UPDATING NEW")
+      console.log(treeData)
+      console.log(data)
       let updatedTree = {name: data.levelName}
       updatedTree.children = data.options.map((val)=>{
         console.log("XXXXX")
         console.log(val)
-        return {name: val.option, children:[]}
+        
+        return {name: val.input, children:[]}
       })
       console.log("UPDATING TREE")
       console.log(updatedTree)
       setTreeData(updatedTree)
-    }
-    else{
+    // }
+    // else{
+    //   console.log("UPDATING EXISTING TRREE")
 
-    }
+    // }
+    
   }
 
 

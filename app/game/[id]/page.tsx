@@ -38,10 +38,7 @@ export default function Home(props:any) {
 
     useEffect(() => {
         fetch(`/api/game/${props.params.id}`).then(async (res) => {
-            console.log("XXXXXX")
-            console.log(props.params.id)
             let gameJSON = await res.json()
-            console.log(gameJSON)
             setStep(gameJSON.start)
             setGameMap(gameJSON)
             setGameTitle(gameJSON.title)
@@ -81,8 +78,8 @@ export default function Home(props:any) {
 
 
     return (
-        <main className={styles.main}>
-            <div className={styles.description}>
+        <main >
+            <div >
                  <a
           href="/"
           target="_self"
@@ -101,7 +98,7 @@ export default function Home(props:any) {
 
             </div>
 
-            <div className={styles.center}>
+            <div >
 
                 {imageDisplay ? <Image
                     // className={styles.logo}
@@ -115,19 +112,19 @@ export default function Home(props:any) {
                 }
             </div>
 
-            <div className={styles.center}>
+            <div>
                 <p>
                     {promptDisplay}
                 </p>
             </div>
 
-            <div className={styles.center}>
+            <div>
                 <p>
                     {popupPrompt}
                 </p>
             </div>
 
-            <div className={styles.center}>
+            <div>
                 {generateOptions()}
             </div>
         </main>

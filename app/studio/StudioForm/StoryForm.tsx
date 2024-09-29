@@ -52,26 +52,24 @@ function updateOptions(opts){
         <form onSubmit={processSubmission}>
           <div className="form-group  m-2">
             <p>Level Name:</p>
-            <Input name="levelName" type="text" className="form-control" id="levelName" placeholder="Enter Level Name" />
+            <Input name="levelName" type="text" className="form-control" id="levelName" placeholder="Enter Level Name" isRequired/>
           </div>
           <div className="form-group  m-2">
             <p>Prompt:</p>
-            <Input name="levelPrompt" type="text" className="form-control" id="levelPrompt"  placeholder="Enter prompt" />
+            <Input name="levelPrompt" type="text" className="form-control" id="levelPrompt"  placeholder="Enter prompt" isRequired/>
           </div>
 
 
           <div className="form-group  m-2">
             <p>Image:</p>
-            <Input name="levelPic" type="file" accept="image/png, image/jpeg" className="form-control" id="image" onChange={handleImageChange}/>
+            <Input name="levelPic" type="file" accept="image/png, image/jpeg" className="form-control" id="image" onChange={handleImageChange} isRequired/>
           </div>
 
           <Divider/>
-
+          
           <div className="form-check m-2">
             <LevelOptions updateOptions={updateOptions}/>
           </div>
-
-
 
 
           <div className="form-group m-2">
