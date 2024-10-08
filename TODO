@@ -1,5 +1,12 @@
-Finish options generation logic 
 Finish form logic
+    - Node selection logic
+    - Photo storage functionality
+    - Node Search Update
+    - Story format conversion
+    - Deletion logic
+    - Error handling
+
+Fix compile errors
 Finish story data import logic
 Add remove option
 Import prior game page

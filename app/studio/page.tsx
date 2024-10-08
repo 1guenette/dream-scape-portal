@@ -14,57 +14,71 @@ import { useState } from "react";
 
 export default function Studio() {
 
-  const dataTest = {
-    name: 'Root',
-    // children: [
-    //   {
-    //     name: 'Child One',
-    //     children: [
-    //       {
-    //         name: 'Child One'
-    //       },
-    //       {
-    //         name: 'Child Two'
-    //       }
-    //     ]
-    //   },
-
-  }
-
   const [data, setData] = useState({})
   const [treeData, setTreeData] = useState({})
+  const [currNode, setCurrNode] = useState({})
+  const [levelList, setLevelList] = useState([])
 
   function updateStory(levelData){
-    console.log("Updating Story")
-    console.log(levelData)
     setData(levelData)
     updateTreeGraphic(levelData)
-
   }
 
   function updateTreeGraphic(data){
 
-  // if root   
-    // if (!treeData.children){
-      console.log("UPDATING NEW")
-      console.log(treeData)
-      console.log(data)
-      let updatedTree = {name: data.levelName}
+    if(levelList.length === 0)
+    {
+      let updatedTree = {name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null}
+      let updatedList = [data.levelName]
       updatedTree.children = data.options.map((val)=>{
-        console.log("XXXXX")
-        console.log(val)
-        
-        return {name: val.input, children:[]}
+        updatedList.push(val.input)
+        return {name: val.input, levelPrompt: null, children:[], parent: updatedTree.name}
       })
-      console.log("UPDATING TREE")
-      console.log(updatedTree)
       setTreeData(updatedTree)
-    // }
-    // else{
-    //   console.log("UPDATING EXISTING TRREE")
+      setLevelList(updatedList)
+    }
+    else{
 
-    // }
+    }
+  }
+
+  function findNode(tree, nameSel){
+
+    console.log(tree.name === nameSel)
+    if(tree.name === nameSel){
+      return tree
+    }
     
+    if(tree.children && tree.children.length > 0 ){
+      
+      for (let node of tree.children){
+        const res = findNode(node, nameSel)
+        if(res){
+          return res
+        }
+      }
+    }
+    return null;
+  }
+
+
+  //TODO: Test
+  function replaceNodeByName(tree, targetName, newSubTree) {
+    if (tree.name === targetName) {
+      return newSubTree; // Replace the node with the new subtree
+    }
+  
+    if (tree.children && tree.children.length > 0) {
+      tree.children = tree.children.map(child => replaceNodeByName(child, targetName, newSubTree));
+    }
+  
+    return tree; // Return the modified tree
+  }
+
+  
+  function updateCurrNode(nodeName){
+    let nodeSelected = findNode(treeData, nodeName)
+    setCurrNode(nodeSelected)
   }
 
 
@@ -81,13 +95,13 @@ export default function Studio() {
             className: 'custom'
           }}
           gProps={{
-            onClick: (e, node) => { console.log(node) },
+            onClick: (e, node) => { updateCurrNode(node, e) },
             onContextMenu: (e) => { console.log(e) }
           }}
         />
       </div>
       <div className="flex items-center justify-center">
-        <StoryForm data={data} updateStory={updateStory}/>
+        <StoryForm nodeSelected={currNode} updateStory={updateStory}/>
       </div>
     </main>
   )

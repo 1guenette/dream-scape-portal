@@ -17,6 +17,10 @@ export default function StoryForm(props) {
 const [options, setOptions] = useState([])
 const [image, setImage] = useState(null);
 
+useEffect(()=>{
+  console.log("------")
+}, [props.nodeSelected])
+
 function processSubmission(e){
 
   e.preventDefault()
@@ -26,8 +30,6 @@ function processSubmission(e){
   let levelData = {levelName:levelName, levelPrompt: levelPrompt, options: options }
 
   props.updateStory(levelData)
-
-  
 
   //'Content-Type': 'multipart/form-data' header needed for axios submission
 }
