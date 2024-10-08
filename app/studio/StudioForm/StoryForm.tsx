@@ -7,7 +7,7 @@ import Dropdown from "../dropdown";
 import "../graph.css";
 
 // import "bootstrap/dist/css/bootstrap.min.css"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //[{option: "enter the good room", loopBack: false, loopBackText: null}, {option: "enter the bad room", loopBack: true, loopBackText: "bad room is locked"}]
 
@@ -19,6 +19,7 @@ const [image, setImage] = useState(null);
 
 useEffect(()=>{
   console.log("------")
+  console.log(props.nodeSelected?.name)
 }, [props.nodeSelected])
 
 function processSubmission(e){
@@ -54,7 +55,7 @@ function updateOptions(opts){
         <form onSubmit={processSubmission}>
           <div className="form-group  m-2">
             <p>Level Name:</p>
-            <Input name="levelName" type="text" className="form-control" id="levelName" placeholder="Enter Level Name" isRequired/>
+            <Input name="levelName" type="text" className="form-control" id="levelName" placeholder="Enter Level Name" defaultValue={props.nodeSelected?.name} isRequired/>
           </div>
           <div className="form-group  m-2">
             <p>Prompt:</p>
@@ -70,7 +71,7 @@ function updateOptions(opts){
           <Divider/>
           
           <div className="form-check m-2">
-            <LevelOptions updateOptions={updateOptions}/>
+            <LevelOptions nodeSelected={props.nodeSelected} updateOptions={updateOptions}/>
           </div>
 
 
