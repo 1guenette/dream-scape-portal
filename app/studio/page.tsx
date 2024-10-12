@@ -37,7 +37,7 @@ export default function Studio() {
         updatedList.push(val.name)
         return {name: val.name, levelPrompt: null, children:[], parent: updatedTree.name}
       })
-      console.log(updatedTree)
+      console.log("FIRST")
       setTreeData(updatedTree)
       setLevelList(updatedList)
     }
@@ -51,8 +51,8 @@ export default function Studio() {
       let updatedTree = replaceNodeByName(treeData, updatedSubTree, currNode)
 
       console.log("NEW___________")
-      console.log()
       console.log(updatedTree)
+      setTreeData(updatedTree)
 
     }
   }

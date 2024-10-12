@@ -35,10 +35,13 @@ useEffect(()=>{
 function processSubmission(e){
 
   e.preventDefault()
-  const levelName = e.target.levelName[0].value
-  const levelPrompt = e.target.levelPrompt.value
-  const image = e.target[2].value
-  let levelData = {levelName:levelName, levelPrompt: levelPrompt, options: options }
+  console.log("SUBMITTING")
+  console.log(options)
+
+  // const levelName = e.target.levelName[0].value
+  // const levelPrompt = e.target.levelPrompt.value
+  // const image = e.target[2].value
+  let levelData = {levelName:levelName, levelPrompt: prompt, options: options }
 
   props.updateStory(levelData)
 
