@@ -23,9 +23,6 @@ const [prompt, setPrompt] = useState("")
 
 useEffect(()=>{
   
-
-  console.log(props.nodeSelected)
-
   setLevelName(props.nodeSelected?.name)
   setPrompt(props.nodeSelected?.levelPrompt || '')
   setOptions(props.nodeSelected?.children)
@@ -41,7 +38,7 @@ function processSubmission(e){
   // const levelName = e.target.levelName[0].value
   // const levelPrompt = e.target.levelPrompt.value
   // const image = e.target[2].value
-  let levelData = {levelName:levelName, levelPrompt: prompt, options: options }
+  let levelData = {levelName:levelName, levelPrompt: prompt, children: options }
 
   props.updateStory(levelData)
 

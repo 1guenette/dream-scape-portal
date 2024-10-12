@@ -29,25 +29,28 @@ export default function Studio() {
     console.log(data)
     
 
+    //FIX stupid update, fucking update of parent option deletes all child options. Issue is with childe/options.  pick a fucking name
     if(levelList.length === 0) 
     {
       let updatedTree = {name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null}
       let updatedList = [data.levelName]
-      updatedTree.children = data.options.map((val)=>{
+      updatedTree.children = data.children.map((val)=>{
         updatedList.push(val.name)
-        return {name: val.name, levelPrompt: null, children:[], parent: updatedTree.name}
+        return {name: val.name, levelPrompt: null, children:[], parent: updatedTree.name, loopBack: val.loopBack, loopBackText: val.loopBackText}
       })
       console.log("FIRST")
       setTreeData(updatedTree)
       setLevelList(updatedList)
     }
     else{
-      let updatedSubTree = {name: data.levelName, levelPrompt: data.levelPrompt, children: [], parent: null}
+      let updatedSubTree = {name: data.levelName, levelPrompt: data.levelPrompt, children: data?.children || [], parent: null}
       let updatedList = [data.levelName]
-      updatedSubTree.children = data.options.map((val)=>{
-        updatedList.push(val.name)
-        return {name: val.name, levelPrompt: null, children:[], parent: updatedSubTree.name}
-      })
+      // updatedSubTree.children = data.children.map((val)=>{
+      //   updatedList.push(val.name)
+
+        
+      //   return {name: val.name, levelPrompt: null, children: val.children || [], parent: updatedSubTree.name, loopBack: val.loopBack, loopBackText: val.loopBackText}
+      // })
       let updatedTree = replaceNodeByName(treeData, updatedSubTree, currNode)
 
       console.log("NEW___________")

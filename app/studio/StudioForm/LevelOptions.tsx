@@ -15,9 +15,6 @@ function LevelOptions(props:any) {
 
   
 useEffect(()=>{
-
-  console.log("======")
-  console.log(props.options)
   setOptions(props.options)
 
 },[props.options])
@@ -39,8 +36,6 @@ useEffect(()=>{
         return opt
       }
     })
-    console.log("CHANGE INPUT")
-    console.log(newOptions)
     setOptions(newOptions)
     props.updateOptions(newOptions)
     
