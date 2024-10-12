@@ -13,22 +13,34 @@ import { skip } from "node:test";
 function LevelOptions(props:any) {
   const [options, setOptions] = useState<any[]>([])
 
+  
+useEffect(()=>{
+
+  console.log("======")
+  console.log(props.options)
+  setOptions(props.options)
+
+},[props.options])
+  
+  
   // Function to add a new empty input field to the list
   function addOption() {
-    setOptions([...options, { input: '', loopBack: false, loopBackText: '' }]); // Adds an empty input field
+    setOptions([...options, { name: '', loopBack: false, loopBackText: '' }]);
   };
 
   function handleInputChange(index, value) {
     let newOptions = options.map((opt, i) => {
       if (i === index) {
         let updatedOption = opt
-        updatedOption.input = value
+        updatedOption.name = value
         return updatedOption
       }
       else {
         return opt
       }
     })
+    console.log("CHANGE INPUT")
+    console.log(newOptions)
     setOptions(newOptions)
     props.updateOptions(newOptions)
     
@@ -76,13 +88,13 @@ function LevelOptions(props:any) {
     <div>
       <Button onClick={addOption}>Add Input</Button>
 
-      {options.map((option, index) => (
+      {options?.map((option, index) => (
         <>
-        <div className="grid grid-cols gap-1">
+        <div className="grid grid-cols gap-1" key={index}>
           <div className="col-start-1 col-span-5 ..." >
             <Input
               type="text"
-              value={option.input}
+              value={option.name}
               onChange={(e) => handleInputChange(index, e.target.value)}
               placeholder="Enter value"
               isRequired

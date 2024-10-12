@@ -25,15 +25,18 @@ export default function Studio() {
   }
 
   function updateTreeGraphic(data){
+    console.log("updateTreeGraphic")
+    
 
-    if(levelList.length === 0)
+    if(levelList.length === 0) 
     {
       let updatedTree = {name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null}
       let updatedList = [data.levelName]
       updatedTree.children = data.options.map((val)=>{
-        updatedList.push(val.input)
-        return {name: val.input, levelPrompt: null, children:[], parent: updatedTree.name}
+        updatedList.push(val.name)
+        return {name: val.name, levelPrompt: null, children:[], parent: updatedTree.name}
       })
+      console.log(updatedTree)
       setTreeData(updatedTree)
       setLevelList(updatedList)
     }

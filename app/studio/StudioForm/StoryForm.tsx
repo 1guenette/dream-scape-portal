@@ -17,9 +17,19 @@ export default function StoryForm(props) {
 const [options, setOptions] = useState([])
 const [image, setImage] = useState(null);
 
+const [levelName, setLevelName] = useState("")
+const [prompt, setPrompt] = useState("")
+
+
 useEffect(()=>{
-  console.log("------")
-  console.log(props.nodeSelected?.name)
+  
+
+  console.log(props.nodeSelected)
+
+  setLevelName(props.nodeSelected?.name)
+  setPrompt(props.nodeSelected?.levelPrompt || '')
+  setOptions(props.nodeSelected?.children)
+
 }, [props.nodeSelected])
 
 function processSubmission(e){
@@ -40,14 +50,12 @@ function handleImageChange(e){
 }
 
 function updateOptions(opts){
+  console.log("------updateOPtions")
+  console.log(opts)
   setOptions(opts)
-
 }
 
-
-
   return (
-
 
       <Card style={{ width: "700px" }}>
         {/* navbar */}
@@ -55,11 +63,11 @@ function updateOptions(opts){
         <form onSubmit={processSubmission}>
           <div className="form-group  m-2">
             <p>Level Name:</p>
-            <Input name="levelName" type="text" className="form-control" id="levelName" placeholder="Enter Level Name" defaultValue={props.nodeSelected?.name} isRequired/>
+            <Input name="levelName" type="text" className="form-control" id="levelName" placeholder="Enter Level Name"  isRequired value={levelName} onChange={(e)=>{setLevelName(e.target.value)}}/>
           </div>
           <div className="form-group  m-2">
             <p>Prompt:</p>
-            <Input name="levelPrompt" type="text" className="form-control" id="levelPrompt"  placeholder="Enter prompt" isRequired/>
+            <Input name="levelPrompt" type="text" className="form-control" id="levelPrompt"  placeholder="Enter prompt" value={prompt} onChange={(e)=>{setPrompt(e.target.value)}}/>
           </div>
 
 
@@ -71,7 +79,7 @@ function updateOptions(opts){
           <Divider/>
           
           <div className="form-check m-2">
-            <LevelOptions nodeSelected={props.nodeSelected} updateOptions={updateOptions}/>
+            <LevelOptions options={options || []} updateOptions={updateOptions}/>
           </div>
 
 
