@@ -26,6 +26,7 @@ export default function Studio() {
 
   function updateTreeGraphic(data){
     console.log("updateTreeGraphic")
+    console.log(data)
     
 
     if(levelList.length === 0) 
@@ -41,6 +42,17 @@ export default function Studio() {
       setLevelList(updatedList)
     }
     else{
+      let updatedSubTree = {name: data.levelName, levelPrompt: data.levelPrompt, children: [], parent: null}
+      let updatedList = [data.levelName]
+      updatedSubTree.children = data.options.map((val)=>{
+        updatedList.push(val.name)
+        return {name: val.name, levelPrompt: null, children:[], parent: updatedSubTree.name}
+      })
+      let updatedTree = replaceNodeByName(treeData, updatedSubTree, currNode)
+
+      console.log("NEW___________")
+      console.log()
+      console.log(updatedTree)
 
     }
   }
@@ -66,13 +78,13 @@ export default function Studio() {
 
 
   //TODO: Test
-  function replaceNodeByName(tree, targetName, newSubTree) {
-    if (tree.name === targetName) {
+  function replaceNodeByName(tree, newSubTree, node) {
+    if (tree.name === node.name) {
       return newSubTree; // Replace the node with the new subtree
     }
   
     if (tree.children && tree.children.length > 0) {
-      tree.children = tree.children.map(child => replaceNodeByName(child, targetName, newSubTree));
+      tree.children = tree.children.map(child => replaceNodeByName(child, newSubTree, node));
     }
   
     return tree; // Return the modified tree
