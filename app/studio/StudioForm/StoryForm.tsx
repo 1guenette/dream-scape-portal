@@ -1,6 +1,6 @@
 'use client'
 import { Accordion, AccordionItem, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Divider, Button,Card, CardHeader, CardBody, CardFooter,
-    Select, SelectItem
+    Select, SelectItem, Image
  } from "@nextui-org/react";
 import LevelOptions from "./LevelOptions";
 import Dropdown from "../dropdown";
@@ -26,32 +26,51 @@ useEffect(()=>{
   setLevelName(props.nodeSelected?.name)
   setPrompt(props.nodeSelected?.levelPrompt || '')
   setOptions(props.nodeSelected?.children)
+  setImage(props.nodeSelected?.image)
+  setImageDisplay(props.nodeSelected?.image)
 
 }, [props.nodeSelected])
 
 function processSubmission(e){
 
   e.preventDefault()
-  console.log("SUBMITTING")
-  console.log(options)
 
   // const levelName = e.target.levelName[0].value
   // const levelPrompt = e.target.levelPrompt.value
   // const image = e.target[2].value
-  let levelData = {levelName:levelName, levelPrompt: prompt, children: options }
+  let levelData = {levelName:levelName, levelPrompt: prompt, children: options, image: image }
 
   props.updateStory(levelData)
 
   //'Content-Type': 'multipart/form-data' header needed for axios submission
 }
 
-function handleImageChange(e){
-  setImage(e.target.files[0]);
-}
+  function setImageDisplay(fileData) {
+    let imgtag = document.getElementById("myimage");
+    if (fileData) {
+        let selectedFile = fileData
+        let reader = new FileReader();
+        imgtag.title = selectedFile.name;
+        reader.onload = function (event) {
+          imgtag.src = event.target.result;
+        };
+        reader.readAsDataURL(selectedFile);
+    }
+    else {
+      console.log("NO IMAGE")
+      imgtag?.removeAttribute('title')
+      imgtag?.removeAttribute('src')
+    }
+
+  }
+
+  function handleImageChange(e) {
+    setImage(e.target.files[0]);
+    let selectedFile = e.target.files[0];
+    setImageDisplay(selectedFile)
+  }
 
 function updateOptions(opts){
-  console.log("------updateOPtions")
-  console.log(opts)
   setOptions(opts)
 }
 
@@ -74,6 +93,11 @@ function updateOptions(opts){
           <div className="form-group  m-2">
             <p>Image:</p>
             <Input name="levelPic" type="file" accept="image/png, image/jpeg" className="form-control" id="image" onChange={handleImageChange} isRequired/>
+            <img
+            id="myimage"
+      width={300}
+    />
+            
           </div>
 
           <Divider/>

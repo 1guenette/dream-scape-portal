@@ -84,7 +84,7 @@ useEffect(()=>{
       <Button onClick={addOption}>Add Input</Button>
 
       {options?.map((option, index) => (
-        <>
+        <div key={index}>
         <div className="grid grid-cols gap-1" key={index}>
           <div className="col-start-1 col-span-5 ..." >
             <Input
@@ -112,7 +112,7 @@ useEffect(()=>{
             <Button color="danger" variant="bordered" onClick={() => deleteOption(index)}>Delete</Button>
           </div>
           </div>
-        </>
+        </div>
 
       ))}
     </div>
