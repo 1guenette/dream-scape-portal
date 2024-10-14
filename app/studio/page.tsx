@@ -4,6 +4,7 @@ import { Tree, AnimatedTree } from 'react-tree-graph';
 import StoryForm from './StudioForm/StoryForm'
 import Tree2 from "./StudioForm/Tree2";
 import { useState } from "react";
+import axios from "axios";
 // import "./graph.css";
 // import "../globals.css";
 // import "bootstrap/dist/css/bootstrap.min.css"
@@ -25,6 +26,23 @@ export default function Studio() {
     updateTreeGraphic(levelData)
   }
 
+  function submitData(formData) {
+
+    let options = {
+          url: `/api/studio`,
+          method: 'POST',
+          rejectUnauthorized: false,
+          data: formData
+      }
+  
+      axios(options).then(async (res: any) => {
+        console.log("HAHAHAHAHAHAHAHA_____")
+        console.log(res)
+  
+      });
+  
+  }
+
   function updateTreeGraphic(data){
     if(levelList.length === 0) 
     {
@@ -37,12 +55,14 @@ export default function Studio() {
       setTreeData(updatedTree)
       setCurrNode(updatedTree)
       setLevelList(updatedList)
+      submitData(updatedTree)
     }
     else{
       let updatedSubTree = {name: data.levelName, levelPrompt: data.levelPrompt, children: data?.children || [], parent: null,  image: data.image}
       let updatedList = [data.levelName]
       let updatedTree = replaceNodeByName(treeData, updatedSubTree, currNode)
       setTreeData(updatedTree)
+      submitData(updatedTree)
     }
   }
 

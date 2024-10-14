@@ -99,6 +99,7 @@ export default function StoryForm(props) {
   function handleImageChange(e) {
     setImage(e.target.files[0]);
     let selectedFile = e.target.files[0];
+    console.log(selectedFile)
     setImageDisplay(selectedFile)
   }
 
