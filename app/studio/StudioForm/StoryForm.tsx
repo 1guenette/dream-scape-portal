@@ -1,10 +1,15 @@
 'use client'
-import { Accordion, AccordionItem, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Divider, Button,Card, CardHeader, CardBody, CardFooter,
-    Select, SelectItem, Image
- } from "@nextui-org/react";
+
+import {
+  Accordion, AccordionItem, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Divider, Button, Card, CardHeader, CardBody, CardFooter,
+  Select, SelectItem, Image
+} from "@nextui-org/react";
 import LevelOptions from "./LevelOptions";
 import Dropdown from "../dropdown";
 import "../graph.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // import "bootstrap/dist/css/bootstrap.min.css"
 import { useState, useEffect } from "react";
@@ -14,50 +19,77 @@ import { useState, useEffect } from "react";
 
 export default function StoryForm(props) {
 
-const [options, setOptions] = useState([])
-const [image, setImage] = useState(null);
+  const [options, setOptions] = useState([])
+  const [image, setImage] = useState(null);
 
-const [levelName, setLevelName] = useState("")
-const [prompt, setPrompt] = useState("")
+  const [levelName, setLevelName] = useState("")
+  const [prompt, setPrompt] = useState("")
 
 
-useEffect(()=>{
-  
-  setLevelName(props.nodeSelected?.name)
-  setPrompt(props.nodeSelected?.levelPrompt || '')
-  setOptions(props.nodeSelected?.children)
-  setImage(props.nodeSelected?.image)
-  setImageDisplay(props.nodeSelected?.image)
+  useEffect(() => {
 
-}, [props.nodeSelected])
+    setLevelName(props.nodeSelected?.name)
+    setPrompt(props.nodeSelected?.levelPrompt || '')
+    setOptions(props.nodeSelected?.children)
+    setImage(props.nodeSelected?.image)
+    
+    setImageDisplay(props.nodeSelected?.image)
 
-function processSubmission(e){
+  }, [props.nodeSelected])
 
-  e.preventDefault()
+  function processSubmission(e) {
+    
+    e.preventDefault()
+    console.log("SUBMITTING")
+    console.log(options)
+    let levelData = { levelName: levelName, levelPrompt: prompt, children: options, image: image }
 
-  // const levelName = e.target.levelName[0].value
-  // const levelPrompt = e.target.levelPrompt.value
-  // const image = e.target[2].value
-  let levelData = {levelName:levelName, levelPrompt: prompt, children: options, image: image }
+    if(validate(levelData)){
+    props.updateStory(levelData)
+    toast.success("Updated story")
+    }
+    else{
+      toast.error("Data not valid")
+    }
 
-  props.updateStory(levelData)
+    //'Content-Type': 'multipart/form-data' header needed for axios submission
+  }
 
-  //'Content-Type': 'multipart/form-data' header needed for axios submission
-}
+  function validate(data){
+
+    function invalidLoopBack(){
+     return data.children.filter(val=> val.loopBack && val.loopBackText.replace(/\s/g, '').length === 0).length>0
+    }
+
+    function invalidLevelName(){
+      return data?.levelName?.replace(/\s/g, '').length === 0
+    }
+
+    function missingPrompt(){
+      return data?.levelPrompt.replace(/\s/g, '').length === 0 
+    }
+
+
+    if(invalidLevelName() || missingPrompt() || invalidLoopBack() ){
+      console.log("INVALID")    
+      return false;
+    }
+    return true;
+  }
 
   function setImageDisplay(fileData) {
     let imgtag = document.getElementById("myimage");
-    if (fileData) {
-        let selectedFile = fileData
-        let reader = new FileReader();
-        imgtag.title = selectedFile.name;
-        reader.onload = function (event) {
-          imgtag.src = event.target.result;
-        };
-        reader.readAsDataURL(selectedFile);
+    if (fileData && imgtag) {
+      let selectedFile = fileData
+      let reader = new FileReader();
+      imgtag.title = selectedFile.name;
+      reader.onload = function (event) {
+        // @ts-ignore: Object is possibly 'null'.
+        imgtag.src = event.target.result;
+      };
+      reader.readAsDataURL(selectedFile);
     }
     else {
-      console.log("NO IMAGE")
       imgtag?.removeAttribute('title')
       imgtag?.removeAttribute('src')
     }
@@ -70,49 +102,60 @@ function processSubmission(e){
     setImageDisplay(selectedFile)
   }
 
-function updateOptions(opts){
-  setOptions(opts)
-}
+  function updateOptions(opts) {
+    setOptions(opts)
+  }
 
   return (
+    <Card style={{ width: "700px" }}>
+      {/* navbar */}
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable={false}
+        pauseOnHover
+        theme="dark"
+      />
+      <form onSubmit={processSubmission}>
+        <div className="form-group  m-2">
+          <p>Level Name:</p>
+          <Input name="levelName" type="text" className="form-control" id="levelName" errorMessage="input required" placeholder="Enter Level Name" isRequired value={levelName} onChange={(e) => { setLevelName(e.target.value) }} />
+        </div>
+        <div className="form-group  m-2">
+          <p>Prompt:</p>
+          <Input name="levelPrompt" type="text" className="form-control" errorMessage="input required"  id="levelPrompt" placeholder="Enter prompt" value={prompt} onChange={(e) => { setPrompt(e.target.value) }} required={true} isRequired/>
+        </div>
 
-      <Card style={{ width: "700px" }}>
-        {/* navbar */}
 
-        <form onSubmit={processSubmission}>
-          <div className="form-group  m-2">
-            <p>Level Name:</p>
-            <Input name="levelName" type="text" className="form-control" id="levelName" placeholder="Enter Level Name"  isRequired value={levelName} onChange={(e)=>{setLevelName(e.target.value)}}/>
-          </div>
-          <div className="form-group  m-2">
-            <p>Prompt:</p>
-            <Input name="levelPrompt" type="text" className="form-control" id="levelPrompt"  placeholder="Enter prompt" value={prompt} onChange={(e)=>{setPrompt(e.target.value)}}/>
-          </div>
-
-
-          <div className="form-group  m-2">
-            <p>Image:</p>
-            <Input name="levelPic" type="file" accept="image/png, image/jpeg" className="form-control" id="image" onChange={handleImageChange} isRequired/>
-            <img
+        <div className="form-group  m-2">
+          <p>Image:</p>
+          <Input name="levelPic" type="file" accept="image/png, image/jpeg" className="form-control" id="image" onChange={handleImageChange} isRequired />
+          <img
+            alt=""
             id="myimage"
-      width={300}
-    />
-            
-          </div>
+            width={300}
+          />
 
-          <Divider/>
-          
-          <div className="form-check m-2">
-            <LevelOptions options={options || []} updateOptions={updateOptions}/>
-          </div>
+        </div>
 
-
-          <div className="form-group m-2">
-            <Button type="submit" className="btn btn-primary">Save</Button>
-          </div>
-        </form>
         <Divider />
 
-      </Card>
+        <div className="form-check m-2">
+          <LevelOptions options={options || []} updateOptions={updateOptions} />
+        </div>
+
+
+        <div className="form-group m-2">
+          <Button type="submit" className="btn btn-primary">Save</Button>
+        </div>
+      </form>
+      <Divider />
+
+    </Card>
   )
 }

@@ -16,8 +16,9 @@ export default function Studio() {
 
   const [data, setData] = useState({})
   const [treeData, setTreeData] = useState({})
-  const [currNode, setCurrNode] = useState({})
-  const [levelList, setLevelList] = useState([])
+  const [currNode, setCurrNode] = useState({children: []})
+  const [levelList, setLevelList] = useState<any[]>([])
+  
 
   function updateStory(levelData){
     setData(levelData)
@@ -34,6 +35,7 @@ export default function Studio() {
         return {name: val.name, levelPrompt: null, children:[], parent: updatedTree.name, loopBack: val.loopBack, loopBackText: val.loopBackText}
       })
       setTreeData(updatedTree)
+      setCurrNode(updatedTree)
       setLevelList(updatedList)
     }
     else{
@@ -46,7 +48,6 @@ export default function Studio() {
 
   function findNode(tree, nameSel){
 
-    console.log(tree.name === nameSel)
     if(tree.name === nameSel){
       return tree
     }
@@ -64,7 +65,6 @@ export default function Studio() {
   }
 
 
-  //TODO: Test
   function replaceNodeByName(tree, newSubTree, node) {
     if (tree.name === node.name) {
       return newSubTree; // Replace the node with the new subtree
@@ -97,7 +97,7 @@ export default function Studio() {
             className: 'custom'
           }}
           gProps={{
-            onClick: (e, node) => { updateCurrNode(node, e) },
+            onClick: (e, node) => { updateCurrNode(node) },
             onContextMenu: (e) => { console.log(e) }
           }}
         />
