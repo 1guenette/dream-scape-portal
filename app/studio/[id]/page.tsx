@@ -1,17 +1,13 @@
 'use client'
-import Dropdown from "./dropdown";
+import Dropdown from "../dropdown";
 import { Tree, AnimatedTree } from 'react-tree-graph';
-import StoryForm from './StudioForm/StoryForm'
-import Tree2 from "./StudioForm/Tree2";
+import StoryForm from '../StudioForm/StoryForm'
+import Tree2 from "../StudioForm/Tree2";
 import { useState } from "react";
 import axios from "axios";
 // import "./graph.css";
 // import "../globals.css";
 // import "bootstrap/dist/css/bootstrap.min.css"
-
-
-
-
 
 export default function Studio() {
 
