@@ -51,9 +51,9 @@ export default function Studio() {
   function updateTreeGraphic(data){
     if(levelList.length === 0) 
     {
-      let updatedTree = {name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null, image: data.image}
+      let updatedTree = {name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null, image: data.image, ending: data.ending}
       let updatedList = [data.levelName]
-      updatedTree.children = data.children.map((val)=>{
+      updatedTree.children = data.children?.map((val)=>{
         updatedList.push(val.name)
         return {name: val.name, levelPrompt: null, children:[], parent: updatedTree.name, loopBack: val.loopBack, loopBackText: val.loopBackText}
       })
@@ -63,10 +63,11 @@ export default function Studio() {
       submitData(updatedTree)
     }
     else{
-      let updatedSubTree = {name: data.levelName, levelPrompt: data.levelPrompt, children: data?.children || [], parent: null,  image: data.image}
+      let updatedSubTree = {name: data.levelName, levelPrompt: data.levelPrompt, children: data?.children || [], parent: null,  image: data.image, ending: data.ending}
       let updatedList = [data.levelName]
       let updatedTree = replaceNodeByName(treeData, updatedSubTree, currNode)
       setTreeData(updatedTree)
+      setCurrNode(updatedSubTree)
       submitData(updatedTree)
     }
   }

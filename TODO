@@ -1,5 +1,6 @@
 Finish form logic
-    - Update entire tree state and set image to url photo location
+    - Add id to levels
+    - Add validation at
     - Add ending attribute
     - Photo storage functionality
     - Story format conversion

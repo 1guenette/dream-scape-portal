@@ -7,7 +7,7 @@ export default function Support() {
         <h1 className={title()}>Support Us</h1>
       </div>
       <div>
-        <p>While Dreamscape will always be open source and free, it takes work to host, maintain, and improve the experience for 
+        <p>While Osomnium will always be open source and free, it takes work to host, maintain, and improve the experience for 
           creatives and players alike
         </p>
         <p>This project is made possible thanks to supporters like you</p>

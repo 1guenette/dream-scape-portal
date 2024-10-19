@@ -7,7 +7,7 @@ export default function AboutPage() {
         <h1 className={title()}>About</h1>
       </div>
       <div>
-        <p>Dreamscape is an open source choose-your-own adventure game, allowing artists and story tellers to generate interactive stories</p>
+        <p>Osomnium is an open source choose-your-own adventure game, allowing artists and story tellers to generate interactive stories</p>
         <br/>
         <br/>
         <p>Happy birthday Robbie, stay creative and artistic</p>

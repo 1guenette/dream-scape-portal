@@ -1,139 +1,67 @@
-'use client'
-import Dropdown from "./dropdown";
-import { Tree, AnimatedTree } from 'react-tree-graph';
-import StoryForm from './StudioForm/StoryForm'
-import Tree2 from "./StudioForm/Tree2";
-import { useState } from "react";
-import axios from "axios";
-// import "./graph.css";
-// import "../globals.css";
-// import "bootstrap/dist/css/bootstrap.min.css"
+"use client"
+import { Link } from "@nextui-org/link";
+import { Snippet } from "@nextui-org/snippet";
+import { Code } from "@nextui-org/code";
+import { button as buttonStyles } from "@nextui-org/theme";
+import { redirect } from 'next/navigation'
+
+import {
+  Accordion, AccordionItem, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Divider, Button, Card, CardHeader, CardBody, CardFooter,
+  Select, SelectItem, Image, Checkbox
+} from "@nextui-org/react";
+
+import { siteConfig } from "@/config/site";
+import { title, subtitle } from "@/components/primitives";
+import { GithubIcon } from "@/components/icons";
+import {useState} from "react"
+
+export default function Home() {
+
+  const [storyName, setStoryName] = useState(null)
 
 
-
-
-
-export default function Studio() {
-
-  const [data, setData] = useState({})
-  const [treeData, setTreeData] = useState({})
-  const [currNode, setCurrNode] = useState({children: []})
-  const [levelList, setLevelList] = useState<any[]>([])
-  
-
-  function updateStory(levelData){
-    setData(levelData)
-    updateTreeGraphic(levelData)
+  function updateStoryName(e){
+    setStoryName(e.target.value)
   }
 
-  function submitData(formData) {
-
-    let options = {
-      url: `/api/studio`,
-      method: 'POST',
-      rejectUnauthorized: false,
-      data: formData
-    }
-
-    let form = new FormData();    
-    console.log("UYYYYYY")
-    console.log(typeof formData.image)
-    //form.append("image", new Blob([formData.image], {type: formData.image.type}))
-    form.append("image", formData.image)
-    form.append("levelData", JSON.stringify(formData))
-
-    axios.post(`/api/studio`, form, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then(async (res: any) => {
-
-    });
-
+  function createStudioSession(){
+    console.log("HAHAHA")
+    console.log(storyName)
+    location.href = `/studio/${storyName}`;
   }
-
-  function updateTreeGraphic(data){
-    if(levelList.length === 0) 
-    {
-      let updatedTree = {name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null, image: data.image}
-      let updatedList = [data.levelName]
-      updatedTree.children = data.children.map((val)=>{
-        updatedList.push(val.name)
-        return {name: val.name, levelPrompt: null, children:[], parent: updatedTree.name, loopBack: val.loopBack, loopBackText: val.loopBackText}
-      })
-      setTreeData(updatedTree)
-      setCurrNode(updatedTree)
-      setLevelList(updatedList)
-      submitData(updatedTree)
-    }
-    else{
-      let updatedSubTree = {name: data.levelName, levelPrompt: data.levelPrompt, children: data?.children || [], parent: null,  image: data.image}
-      let updatedList = [data.levelName]
-      let updatedTree = replaceNodeByName(treeData, updatedSubTree, currNode)
-      setTreeData(updatedTree)
-      submitData(updatedTree)
-    }
-  }
-
-  function findNode(tree, nameSel){
-
-    if(tree.name === nameSel){
-      return tree
-    }
-    
-    if(tree.children && tree.children.length > 0 ){
-      
-      for (let node of tree.children){
-        const res = findNode(node, nameSel)
-        if(res){
-          return res
-        }
-      }
-    }
-    return null;
-  }
-
-
-  function replaceNodeByName(tree, newSubTree, node) {
-    if (tree.name === node.name) {
-      return newSubTree; // Replace the node with the new subtree
-    }
-  
-    if (tree.children && tree.children.length > 0) {
-      tree.children = tree.children.map(child => replaceNodeByName(child, newSubTree, node));
-    }
-  
-    return tree; // Return the modified tree
-  }
-
-  
-  function updateCurrNode(nodeName){
-    let nodeSelected = findNode(treeData, nodeName)
-    setCurrNode(nodeSelected)
-  }
-
-
 
   return (
+    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+      <div className="inline-block max-w-xl text-center justify-center">
+        <h1 className={title()}>Create your story</h1>
+        <br />
+        <br/>
+        <div className="form-group  m-2">
+          <p>Story Name:</p>
+          <Input name="levelName" type="text" className="form-control" id="levelName" errorMessage="input required" placeholder="Enter your story name" onChange={updateStoryName} isRequired />
+        </div>
+      </div>
 
-    <main className="dark text-foreground bg-background">
-      <div style={{overflowX: "scroll"}}>
-        <AnimatedTree
-          data={treeData}
-          height={400}
-          width={400}
-          svgProps={{
-            className: 'custom'
-          }}
-          gProps={{
-            onClick: (e, node) => { updateCurrNode(node) },
-            onContextMenu: (e) => { console.log(e) }
-          }}
-        />
+      <div className="flex gap-3">
+        <Link
+          isExternal
+          className={buttonStyles({
+            color: "primary",
+            radius: "full",
+            variant: "shadow",
+          })}
+          onClick={createStudioSession}
+        >
+          Other Stories
+        </Link>
+        <Link
+          isExternal
+          className={buttonStyles({ variant: "bordered", radius: "full" })}
+          onClick={createStudioSession}
+        >
+          Create
+        </Link>
       </div>
-      <div className="flex items-center justify-center">
-        <StoryForm nodeSelected={currNode} updateStory={updateStory}/>
-      </div>
-    </main>
-  )
+    </section>
+  );
 }

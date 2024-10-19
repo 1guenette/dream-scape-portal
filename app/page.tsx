@@ -28,16 +28,16 @@ export default function Home() {
             radius: "full",
             variant: "shadow",
           })}
-          href={siteConfig.links.docs}
+          href={'/studio'}
         >
-          Documentation
+          Create
         </Link>
         <Link
           isExternal
           className={buttonStyles({ variant: "bordered", radius: "full" })}
-          href={siteConfig.links.github}
+          href={'/game'}
         >
-          Start
+          Play
         </Link>
       </div>
     </section>

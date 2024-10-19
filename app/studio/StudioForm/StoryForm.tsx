@@ -2,7 +2,7 @@
 
 import {
   Accordion, AccordionItem, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Divider, Button, Card, CardHeader, CardBody, CardFooter,
-  Select, SelectItem, Image
+  Select, SelectItem, Image, Checkbox
 } from "@nextui-org/react";
 import LevelOptions from "./LevelOptions";
 import Dropdown from "../dropdown";
@@ -21,10 +21,9 @@ export default function StoryForm(props) {
 
   const [options, setOptions] = useState([])
   const [image, setImage] = useState(null);
-
   const [levelName, setLevelName] = useState("")
   const [prompt, setPrompt] = useState("")
-
+  const [ending, setEnding] = useState(false)
 
   useEffect(() => {
 
@@ -32,6 +31,7 @@ export default function StoryForm(props) {
     setPrompt(props.nodeSelected?.levelPrompt || '')
     setOptions(props.nodeSelected?.children)
     setImage(props.nodeSelected?.image)
+    setEnding(props.nodeSelected?.ending)
     
     setImageDisplay(props.nodeSelected?.image)
 
@@ -40,15 +40,14 @@ export default function StoryForm(props) {
   function processSubmission(e) {
     
     e.preventDefault()
-    console.log("SUBMITTING")
-    console.log(options)
-    let levelData = { levelName: levelName, levelPrompt: prompt, children: options, image: image }
+    let levelData = { levelName: levelName, levelPrompt: prompt, children: options, image: image, ending: ending }
 
     if(validate(levelData)){
     props.updateStory(levelData)
     toast.success("Updated story")
     }
     else{
+      console.log(levelData)
       toast.error("Data not valid")
     }
 
@@ -56,9 +55,10 @@ export default function StoryForm(props) {
   }
 
   function validate(data){
+    console.log(data.levelName)
 
     function invalidLoopBack(){
-     return data.children.filter(val=> val.loopBack && val.loopBackText.replace(/\s/g, '').length === 0).length>0
+     return data.children?.filter(val=> val.loopBack && val.loopBackText.replace(/\s/g, '').length === 0).length>0
     }
 
     function invalidLevelName(){
@@ -66,12 +66,21 @@ export default function StoryForm(props) {
     }
 
     function missingPrompt(){
-      return data?.levelPrompt.replace(/\s/g, '').length === 0 
+      return data?.levelPrompt?.replace(/\s/g, '').length === 0 
+    }
+
+    function missingPhoto(){
+      console.log(image)
+      return image == null
     }
 
 
-    if(invalidLevelName() || missingPrompt() || invalidLoopBack() ){
+    if(invalidLevelName() || missingPrompt() || invalidLoopBack() || missingPhoto()){
       console.log("INVALID")    
+      console.log(invalidLevelName())
+      console.log( missingPrompt())
+      console.log(invalidLoopBack())
+      console.log(missingPhoto())
       return false;
     }
     return true;
@@ -112,7 +121,7 @@ export default function StoryForm(props) {
       {/* navbar */}
       <ToastContainer
         position="top-right"
-        autoClose={1000}
+        autoClose={2000}
         hideProgressBar
         newestOnTop
         closeOnClick
@@ -146,10 +155,13 @@ export default function StoryForm(props) {
 
         <Divider />
 
-        <div className="form-check m-2">
+        <div className="form-check m-2" hidden={ending}>
           <LevelOptions options={options || []} updateOptions={updateOptions} />
         </div>
 
+        <div className="form-check m-2">
+            <Checkbox isSelected={ending} onChange={(e) => {setEnding(!ending) }}>Ending</Checkbox>
+        </div>
 
         <div className="form-group m-2">
           <Button type="submit" className="btn btn-primary">Save</Button>

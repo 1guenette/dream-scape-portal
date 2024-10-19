@@ -2,7 +2,7 @@ export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: "Next.js + NextUI",
-  description: "Welcome to Somniumscape",
+  description: "Welcome to Osomnium",
   navItems: [
     {
       label: "Home",
