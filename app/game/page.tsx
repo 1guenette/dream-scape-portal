@@ -3,49 +3,49 @@ import Image from "next/image";
 import { Button } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import platoDungeon from '../library/test1/test1.json'
+import { title, subtitle } from "@/components/primitives";
 
 export default function Home() {
 
   const [step, setStep] = useState(platoDungeon.start)
   const [gameMap, setGameMap] = useState(platoDungeon)
-
   const [promptDisplay, setPromptDisplay] = useState("")
   const [popupPrompt, setPopupPrompt] = useState("")
 
   useEffect(() => {
-
     let i = 0;
     const stringResponse = gameMap.steps[step].prompt
-
     const intervalId = setInterval(() => {
-      if (i < stringResponse.length + 1) {
+      if (i < stringResponse.length + 1) 
+      {
         setPromptDisplay(stringResponse.slice(0, i));
         i++;
       }
-      else {
+      else 
+      {
         clearInterval(intervalId);
       }
     }, 50);
-
 
     return () => clearInterval(intervalId);
   }, [step])
 
 
   function handleSelection(opt: any) {
-    if (!opt.popupNote) {
+    if (!opt.popupNote) 
+    {
       setStep(opt.next)
       setPopupPrompt('')
     }
-    else {
+    else 
+    {
       setPopupPrompt(opt.popupNote)
     }
   }
 
   function generateOptions() {
     if (!gameMap.steps[`${step}`].ending) {
-
-      return gameMap.steps[`${step}`].options.map((opt:any, i:number) => {
+      return gameMap.steps[`${step}`].options.map((opt: any, i: number) => {
         return <Button key={i} id={opt.id} value={opt.next} color="primary" variant="ghost" onClick={() => handleSelection(opt)}>{opt.description}</Button>
       })
     }
@@ -57,28 +57,19 @@ export default function Home() {
     }
   }
 
-
   return (
-    <main>
-      <div>
-        <a
-          href="/"
-          target="_self"
-          rel="noopener noreferrer"
-        >
-          <p>
-            &larr; Lobby
-          </p>
-        </a>
 
+    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+      <div className="inline-block max-w-xl text-center justify-center">
+        {/* <h1 className={title()}>Welcome to&nbsp;</h1> */}
+        <h1 className={title({ color: "violet" })}>{gameMap["title"]}&nbsp;</h1>
+        <br />
+      </div>
 
-
+      <div className="flex gap-3">
         <p>
           {gameMap["title"]}
         </p>
-
-
-
       </div>
 
       <div >
@@ -90,7 +81,6 @@ export default function Home() {
           height={74}
           priority
         />
-
       </div>
 
       <div>
@@ -108,6 +98,7 @@ export default function Home() {
       <div>
         {generateOptions()}
       </div>
-    </main>
+    </section>
+
   );
 }
