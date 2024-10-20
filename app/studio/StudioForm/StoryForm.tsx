@@ -24,6 +24,7 @@ export default function StoryForm(props) {
   const [levelName, setLevelName] = useState("")
   const [prompt, setPrompt] = useState("")
   const [ending, setEnding] = useState(false)
+  const [id, setId] = useState(null)
 
   useEffect(() => {
 
@@ -32,6 +33,7 @@ export default function StoryForm(props) {
     setOptions(props.nodeSelected?.children)
     setImage(props.nodeSelected?.image)
     setEnding(props.nodeSelected?.ending)
+    setId(props.nodeSelected.id)
     
     setImageDisplay(props.nodeSelected?.image)
 
@@ -40,7 +42,7 @@ export default function StoryForm(props) {
   function processSubmission(e) {
     
     e.preventDefault()
-    let levelData = { levelName: levelName, levelPrompt: prompt, children: options, image: image, ending: ending }
+    let levelData = { id:id, levelName: levelName, levelPrompt: prompt, children: options, image: image, ending: ending }
 
     if(validate(levelData)){
     props.updateStory(levelData)

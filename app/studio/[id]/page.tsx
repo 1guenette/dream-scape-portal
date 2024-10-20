@@ -5,6 +5,7 @@ import StoryForm from '../StudioForm/StoryForm'
 import Tree2 from "../StudioForm/Tree2";
 import { useState } from "react";
 import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
 // import "./graph.css";
 // import "../globals.css";
 // import "bootstrap/dist/css/bootstrap.min.css"
@@ -51,11 +52,11 @@ export default function Studio() {
   function updateTreeGraphic(data){
     if(levelList.length === 0) 
     {
-      let updatedTree = {name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null, image: data.image, ending: data.ending}
+      let updatedTree = {id: uuidv4(), name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null, image: data.image, ending: data.ending}
       let updatedList = [data.levelName]
       updatedTree.children = data.children?.map((val)=>{
         updatedList.push(val.name)
-        return {name: val.name, levelPrompt: null, children:[], parent: updatedTree.name, loopBack: val.loopBack, loopBackText: val.loopBackText}
+        return {id: uuidv4(), name: val.name, levelPrompt: null, children:[], parent: updatedTree.name, loopBack: val.loopBack, loopBackText: val.loopBackText}
       })
       setTreeData(updatedTree)
       setCurrNode(updatedTree)
@@ -63,7 +64,8 @@ export default function Studio() {
       submitData(updatedTree)
     }
     else{
-      let updatedSubTree = {name: data.levelName, levelPrompt: data.levelPrompt, children: data?.children || [], parent: null,  image: data.image, ending: data.ending}
+      let children =  data?.children.map(val=>Object.assign(val, {id: uuidv4()}) )
+      let updatedSubTree = {id: data.id, name: data.levelName, levelPrompt: data.levelPrompt, children: children || [], parent: null,  image: data.image, ending: data.ending}
       let updatedList = [data.levelName]
       let updatedTree = replaceNodeByName(treeData, updatedSubTree, currNode)
       setTreeData(updatedTree)
