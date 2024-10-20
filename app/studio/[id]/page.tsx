@@ -6,11 +6,14 @@ import Tree2 from "../StudioForm/Tree2";
 import { useState } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
+import { useParams } from 'next/navigation'
 // import "./graph.css";
 // import "../globals.css";
 // import "bootstrap/dist/css/bootstrap.min.css"
 
 export default function Studio() {
+
+  const params = useParams()
 
   const [data, setData] = useState({})
   const [treeData, setTreeData] = useState({})
@@ -23,8 +26,8 @@ export default function Studio() {
     updateTreeGraphic(levelData)
   }
 
-  function submitData(formData) {
-
+  function submitData(formData, currNodeData) {
+    let stortName = params.id as string
     let options = {
       url: `/api/studio`,
       method: 'POST',
@@ -33,17 +36,19 @@ export default function Studio() {
     }
 
     let form = new FormData();    
-    console.log("UYYYYYY")
-    console.log(typeof formData.image)
     //form.append("image", new Blob([formData.image], {type: formData.image.type}))
-    form.append("image", formData.image)
-    form.append("levelData", JSON.stringify(formData))
+    form.append("image", currNodeData.image)
+    form.append("levelData", JSON.stringify(currNodeData))
+    form.append("fullTreeData", JSON.stringify(formData))
+    form.append("storyName", stortName)
 
     axios.post(`/api/studio`, form, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     }).then(async (res: any) => {
+
+    }).catch(err=>{
 
     });
 
@@ -61,7 +66,7 @@ export default function Studio() {
       setTreeData(updatedTree)
       setCurrNode(updatedTree)
       setLevelList(updatedList)
-      submitData(updatedTree)
+      submitData(updatedTree, updatedTree)
     }
     else{
       let children =  data?.children.map(val=>Object.assign(val, {id: uuidv4()}) )
@@ -70,7 +75,7 @@ export default function Studio() {
       let updatedTree = replaceNodeByName(treeData, updatedSubTree, currNode)
       setTreeData(updatedTree)
       setCurrNode(updatedSubTree)
-      submitData(updatedTree)
+      submitData(updatedTree, updatedSubTree)
     }
   }
 

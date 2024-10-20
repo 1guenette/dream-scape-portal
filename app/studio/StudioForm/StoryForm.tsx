@@ -49,7 +49,6 @@ export default function StoryForm(props) {
     toast.success("Updated story")
     }
     else{
-      console.log(levelData)
       toast.error("Data not valid")
     }
 
@@ -57,7 +56,6 @@ export default function StoryForm(props) {
   }
 
   function validate(data){
-    console.log(data.levelName)
 
     function invalidLoopBack(){
      return data.children?.filter(val=> val.loopBack && val.loopBackText.replace(/\s/g, '').length === 0).length>0
@@ -72,17 +70,11 @@ export default function StoryForm(props) {
     }
 
     function missingPhoto(){
-      console.log(image)
       return image == null
     }
 
 
     if(invalidLevelName() || missingPrompt() || invalidLoopBack() || missingPhoto()){
-      console.log("INVALID")    
-      console.log(invalidLevelName())
-      console.log( missingPrompt())
-      console.log(invalidLoopBack())
-      console.log(missingPhoto())
       return false;
     }
     return true;
@@ -110,7 +102,6 @@ export default function StoryForm(props) {
   function handleImageChange(e) {
     setImage(e.target.files[0]);
     let selectedFile = e.target.files[0];
-    console.log(selectedFile)
     setImageDisplay(selectedFile)
   }
 
