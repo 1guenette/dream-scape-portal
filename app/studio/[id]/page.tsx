@@ -28,12 +28,6 @@ export default function Studio() {
 
   function submitData(formData, currNodeData) {
     let stortName = params.id as string
-    let options = {
-      url: `/api/studio`,
-      method: 'POST',
-      rejectUnauthorized: false,
-      data: formData
-    }
 
     let form = new FormData();    
     //form.append("image", new Blob([formData.image], {type: formData.image.type}))
@@ -42,7 +36,7 @@ export default function Studio() {
     form.append("fullTreeData", JSON.stringify(formData))
     form.append("storyName", stortName)
 
-    axios.post(`/api/studio`, form, {
+    axios.post(`/api/studio/${stortName}`, form, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -122,6 +116,7 @@ export default function Studio() {
 
     <main className="dark text-foreground bg-background">
       <div style={{overflowX: "scroll"}}>
+        {/* navbar */}
         <AnimatedTree
           data={treeData}
           height={400}

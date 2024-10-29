@@ -7,25 +7,18 @@ const fs = require('fs');
 
 export async function POST(request: NextRequest, response: NextApiResponse) {
 
-    let formData = await request.formData()
-    
-    let storyName = formData.get('storyName')
-    let fileLocation = `public/game-library/${storyName}`
+    let data = await request.json()
+    let fileLocation = `public/game-library/${data.name}`
+    let storyName = data.name
 
-    let levelData = JSON.parse(formData.get('levelData') as string) 
-    let fullTree = formData.get('fullTreeData')
-    let image = formData.get('image') as File
-    
-    const ext = mime.getExtension(mime.getType(image.name) || '')
-    const buffer = Buffer.from(await image.arrayBuffer());
-    
-    if(!fs.existsSync(fileLocation)){
-        fs.mkdirSync(fileLocation);
+    if(fs.existsSync(fileLocation)){
+        return NextResponse.json({ message: "Name already exists" }, { status: 403 });
     }
-
-    fs.writeFileSync(`${fileLocation}/${storyName}.json`, fullTree)
-    fs.writeFileSync(`${fileLocation}/${levelData.id}.${ext}`, buffer)
-    return NextResponse.json({ message: "Info submitted" }, { status: 200 });
+    else{
+        fs.mkdirSync(fileLocation);
+        fs.writeFileSync(`${fileLocation}/${storyName}.json`, '')
+        return NextResponse.json({ message: "Info submitted" }, { status: 200 });
+    }
 
 }
 
