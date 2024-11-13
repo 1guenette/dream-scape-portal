@@ -1,11 +1,11 @@
 Finish form logic
-    - Add id to levels
-    - Add validation at
+    - Add validation for levelname
     - Add ending attribute
     - Photo storage functionality
     - Story format conversion
 
-Fix compile errors
+Add library page
+Implement Game's dyanamic file retrieval
 Finish story data import logic
 Import prior game page
 Setup story library

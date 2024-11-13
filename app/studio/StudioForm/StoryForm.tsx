@@ -73,6 +73,9 @@ export default function StoryForm(props) {
       return image == null
     }
 
+    function levelNameExists(){
+      return data.children?.filter(val=> props?.levelList.includes(val.name)).length > 0
+    }
 
     if(invalidLevelName() || missingPrompt() || invalidLoopBack() || missingPhoto()){
       return false;

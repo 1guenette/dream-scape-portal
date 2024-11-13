@@ -15,14 +15,12 @@ export default function Studio() {
 
   const params = useParams()
 
-  const [data, setData] = useState({})
   const [treeData, setTreeData] = useState({})
   const [currNode, setCurrNode] = useState({children: []})
   const [levelList, setLevelList] = useState<any[]>([])
   
 
   function updateStory(levelData){
-    setData(levelData)
     updateTreeGraphic(levelData)
   }
 
@@ -65,12 +63,17 @@ export default function Studio() {
     else{
       let children =  data?.children.map(val=>Object.assign(val, {id: uuidv4()}) )
       let updatedSubTree = {id: data.id, name: data.levelName, levelPrompt: data.levelPrompt, children: children || [], parent: null,  image: data.image, ending: data.ending}
-      let updatedList = [data.levelName]
+      let updatedList = levelList.concat(data.children.map(v => v.name))
       let updatedTree = replaceNodeByName(treeData, updatedSubTree, currNode)
+      setLevelList(updatedList)
       setTreeData(updatedTree)
       setCurrNode(updatedSubTree)
       submitData(updatedTree, updatedSubTree)
     }
+  }
+
+  function levelsAlreadyExist(){
+
   }
 
   function findNode(tree, nameSel){
@@ -131,7 +134,7 @@ export default function Studio() {
         />
       </div>
       <div className="flex items-center justify-center">
-        <StoryForm nodeSelected={currNode} updateStory={updateStory}/>
+        <StoryForm nodeSelected={currNode} updateStory={updateStory} levelList={levelList}/>
       </div>
     </main>
   )
