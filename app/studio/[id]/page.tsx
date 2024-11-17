@@ -64,7 +64,7 @@ export default function Studio() {
       let children =  data?.children.map(val=>Object.assign(val, {id: uuidv4()}) )
       let updatedSubTree = {id: data.id, name: data.levelName, levelPrompt: data.levelPrompt, children: children || [], parent: null,  image: data.image, ending: data.ending}
       let updatedList = levelList.concat(data.children.map(v => v.name))
-      let updatedTree = replaceNodeByName(treeData, updatedSubTree, currNode)
+      let updatedTree = replaceNodeById(treeData, updatedSubTree, currNode)
       setLevelList(updatedList)
       setTreeData(updatedTree)
       setCurrNode(updatedSubTree)
@@ -76,16 +76,16 @@ export default function Studio() {
 
   }
 
-  function findNode(tree, nameSel){
+  function findNode(tree, idSel){
 
-    if(tree.name === nameSel){
+    if(tree.id === idSel){
       return tree
     }
     
     if(tree.children && tree.children.length > 0 ){
       
       for (let node of tree.children){
-        const res = findNode(node, nameSel)
+        const res = findNode(node, idSel)
         if(res){
           return res
         }
@@ -95,13 +95,13 @@ export default function Studio() {
   }
 
 
-  function replaceNodeByName(tree, newSubTree, node) {
-    if (tree.name === node.name) {
+  function replaceNodeById(tree, newSubTree, node) {
+    if (tree.id === node.id) {
       return newSubTree; // Replace the node with the new subtree
     }
   
     if (tree.children && tree.children.length > 0) {
-      tree.children = tree.children.map(child => replaceNodeByName(child, newSubTree, node));
+      tree.children = tree.children.map(child => replaceNodeById(child, newSubTree, node));
     }
   
     return tree; // Return the modified tree
@@ -109,9 +109,19 @@ export default function Studio() {
 
   
   function updateCurrNode(nodeName){
+    console.log("XXXXX")
+    console.log(nodeName)
     let nodeSelected = findNode(treeData, nodeName)
     setCurrNode(nodeSelected)
   }
+
+  const CustomNodeLabel = ({ nodeData }) => {
+    return (
+      <div>
+        {nodeData.name} (Value: {nodeData.id})
+      </div>
+    );
+  };
 
 
 
@@ -122,6 +132,8 @@ export default function Studio() {
         {/* navbar */}
         <AnimatedTree
           data={treeData}
+          // labelProp={"id"}
+          keyProp={"id"}
           height={400}
           width={400}
           svgProps={{
