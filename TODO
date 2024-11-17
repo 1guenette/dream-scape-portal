@@ -3,6 +3,8 @@ Finish form logic
     - Add ending attribute
     - Photo storage functionality
     - Story format conversion
+    - Add ending logic
+    - Add loopback conditional
 
 Add library page
 Implement Game's dyanamic file retrieval
@@ -10,4 +12,5 @@ Finish story data import logic
 Import prior game page
 Setup story library
     - Setup storage retrieval
+Setup trophy
 Setup electron app

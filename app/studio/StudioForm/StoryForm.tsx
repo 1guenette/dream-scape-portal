@@ -28,11 +28,12 @@ export default function StoryForm(props) {
 
   useEffect(() => {
 
+    console.log(props.nodeSelected)
     setLevelName(props.nodeSelected?.name)
     setPrompt(props.nodeSelected?.levelPrompt || '')
     setOptions(props.nodeSelected?.children)
     setImage(props.nodeSelected?.image)
-    setEnding(props.nodeSelected?.ending)
+    setEnding(props.nodeSelected?.ending || false)
     setId(props.nodeSelected.id)
     
     setImageDisplay(props.nodeSelected?.image)
