@@ -5,7 +5,7 @@ Finish form logic
     - Story format conversion
     - Add ending logic
     - Add loopback conditional
-    - retain saved games
+    - Change save and retrieval to use ID instead of name
 
 Add library page
 Implement Game's dyanamic file retrieval
