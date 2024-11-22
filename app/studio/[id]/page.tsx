@@ -63,10 +63,13 @@ export default function Studio() {
   }
 
   function updateTreeGraphic(data){
-    if(levelList.length === 0) 
+    console.log("*+++++++")
+    console.log(levelList)
+    console.log(treeData)
+    if(!treeData.id) //If first node 
     {
       let updatedTree = {id: uuidv4(), name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null, image: data.image, imageExt: data.imageExt, ending: data.ending}
-      let updatedList = [data.levelName]
+      let updatedList = [updatedTree.id]
       updatedTree.children = data.children?.map((val)=>{
         updatedList.push(val.name)
         return {id: uuidv4(), name: val.name, levelPrompt: null, children:[], parent: updatedTree.name, loopBack: val.loopBack, loopBackText: val.loopBackText}
@@ -77,9 +80,12 @@ export default function Studio() {
       submitData(updatedTree, updatedTree)
     }
     else{
+      console.log("*******")
+      console.log(data)
+      console.log(treeData)
       let children =  data?.children.map(val=>Object.assign(val, {id: uuidv4()}) ) || []
       let updatedSubTree = {id: data.id, name: data.levelName, levelPrompt: data.levelPrompt, children: children || [], parent: null,  image: data.image, imageExt: data.imageExt, ending: data.ending}
-      let updatedList = levelList.concat(data.children.map(v => v.name))
+      let updatedList = levelList.concat(data.children.map(v => v.id))
       let updatedTree = replaceNodeById(treeData, updatedSubTree, currNode)
       setLevelList(updatedList)
       setTreeData(updatedTree)

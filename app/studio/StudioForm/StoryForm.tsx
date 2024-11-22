@@ -47,8 +47,6 @@ export default function StoryForm(props) {
     
     //TODO: set and track image type png vs jpeg
     e.preventDefault()
-    console.log("+++++++")
-    console.log(image)
 
     let imageExt = image?.type === "image/png" ? "png" : "jpeg"; 
     let levelData = { id:id, levelName: levelName, levelPrompt: prompt, children: options, image: image, imageExt: imageExt,  ending: ending }
@@ -82,10 +80,6 @@ export default function StoryForm(props) {
       return image == null
     }
 
-    function levelNameExists(){
-      return data.children?.filter(val=> props?.levelList.includes(val.name)).length > 0
-    }
-
     if(invalidLevelName() || missingPrompt() || invalidLoopBack() || missingPhoto()){
       return false;
     }
@@ -113,10 +107,6 @@ export default function StoryForm(props) {
 
   function updateImageLink(storyName, nodeSelected){
     let link = `/game-library/${storyName}/${nodeSelected.id}.${nodeSelected.imageExt}`
-    console.log("--------")
-    console.log(nodeSelected)
-    console.log(nodeSelected.id)
-    console.log(link)
     setImageLink(link)
     
   }
