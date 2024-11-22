@@ -26,6 +26,8 @@ export default function StoryForm(props) {
   const [ending, setEnding] = useState(false)
   const [id, setId] = useState(null)
 
+  const [imageLink, setImageLink] = useState("")
+
   useEffect(() => {
 
     console.log(props.nodeSelected)
@@ -36,14 +38,20 @@ export default function StoryForm(props) {
     setEnding(props.nodeSelected?.ending || false)
     setId(props.nodeSelected.id)
     
-    setImageDisplay(props.nodeSelected?.image)
+    //setImageDisplay(props.nodeSelected?.image)
+    updateImageLink(props.storyName, props.nodeSelected)
 
   }, [props.nodeSelected])
 
   function processSubmission(e) {
     
+    //TODO: set and track image type png vs jpeg
     e.preventDefault()
-    let levelData = { id:id, levelName: levelName, levelPrompt: prompt, children: options, image: image, ending: ending }
+    console.log("+++++++")
+    console.log(image)
+
+    let imageExt = image?.type === "image/png" ? "png" : "jpeg"; 
+    let levelData = { id:id, levelName: levelName, levelPrompt: prompt, children: options, image: image, imageExt: imageExt,  ending: ending }
 
     if(validate(levelData)){
     props.updateStory(levelData)
@@ -103,9 +111,20 @@ export default function StoryForm(props) {
 
   }
 
+  function updateImageLink(storyName, nodeSelected){
+    let link = `/game-library/${storyName}/${nodeSelected.id}.${nodeSelected.imageExt}`
+    console.log("--------")
+    console.log(nodeSelected)
+    console.log(nodeSelected.id)
+    console.log(link)
+    setImageLink(link)
+    
+  }
+
   function handleImageChange(e) {
-    setImage(e.target.files[0]);
     let selectedFile = e.target.files[0];
+    console.log(selectedFile)
+    setImage(selectedFile);
     setImageDisplay(selectedFile)
   }
 
@@ -146,6 +165,7 @@ export default function StoryForm(props) {
             alt=""
             id="myimage"
             width={300}
+            src={imageLink}
           />
 
         </div>

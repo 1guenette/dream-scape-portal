@@ -3,7 +3,7 @@ import Dropdown from "../dropdown";
 import { Tree, AnimatedTree } from 'react-tree-graph';
 import StoryForm from '../StudioForm/StoryForm'
 import Tree2 from "../StudioForm/Tree2";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'next/navigation'
@@ -15,10 +15,27 @@ export default function Studio() {
 
   const params = useParams()
 
+  const [storyName, setStoryName] = useState(params.id)
   const [treeData, setTreeData] = useState({})
   const [currNode, setCurrNode] = useState({children: []})
   const [levelList, setLevelList] = useState<any[]>([])
+
+  useEffect(()=>{
+    getStoryData()
+
+  },[])
   
+
+  function getStoryData(){
+    let stortName = params.id as string
+    axios.get(`/api/studio/${stortName}`).then(async (res: any) => {
+      console.log("------")
+      console.log(res.data)
+      setTreeData(res.data)
+    }).catch(err=>{
+
+    });
+  }
 
   function updateStory(levelData){
     updateTreeGraphic(levelData)
@@ -28,7 +45,6 @@ export default function Studio() {
     let stortName = params.id as string
 
     let form = new FormData();    
-    //form.append("image", new Blob([formData.image], {type: formData.image.type}))
     form.append("image", currNodeData.image)
     form.append("levelData", JSON.stringify(currNodeData))
     form.append("fullTreeData", JSON.stringify(formData))
@@ -49,7 +65,7 @@ export default function Studio() {
   function updateTreeGraphic(data){
     if(levelList.length === 0) 
     {
-      let updatedTree = {id: uuidv4(), name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null, image: data.image, ending: data.ending}
+      let updatedTree = {id: uuidv4(), name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null, image: data.image, imageExt: data.imageExt, ending: data.ending}
       let updatedList = [data.levelName]
       updatedTree.children = data.children?.map((val)=>{
         updatedList.push(val.name)
@@ -61,8 +77,8 @@ export default function Studio() {
       submitData(updatedTree, updatedTree)
     }
     else{
-      let children =  data?.children.map(val=>Object.assign(val, {id: uuidv4()}) )
-      let updatedSubTree = {id: data.id, name: data.levelName, levelPrompt: data.levelPrompt, children: children || [], parent: null,  image: data.image, ending: data.ending}
+      let children =  data?.children.map(val=>Object.assign(val, {id: uuidv4()}) ) || []
+      let updatedSubTree = {id: data.id, name: data.levelName, levelPrompt: data.levelPrompt, children: children || [], parent: null,  image: data.image, imageExt: data.imageExt, ending: data.ending}
       let updatedList = levelList.concat(data.children.map(v => v.name))
       let updatedTree = replaceNodeById(treeData, updatedSubTree, currNode)
       setLevelList(updatedList)
@@ -109,8 +125,6 @@ export default function Studio() {
 
   
   function updateCurrNode(nodeName){
-    console.log("XXXXX")
-    console.log(nodeName)
     let nodeSelected = findNode(treeData, nodeName)
     setCurrNode(nodeSelected)
   }
@@ -146,7 +160,7 @@ export default function Studio() {
         />
       </div>
       <div className="flex items-center justify-center">
-        <StoryForm nodeSelected={currNode} updateStory={updateStory} levelList={levelList}/>
+        <StoryForm nodeSelected={currNode} updateStory={updateStory} levelList={levelList} storyName={storyName}/>
       </div>
     </main>
   )
