@@ -16,7 +16,7 @@ export default function Studio() {
   const params = useParams()
 
   const [storyName, setStoryName] = useState(params.id)
-  const [treeData, setTreeData] = useState({})
+  const [treeData, setTreeData] = useState({id:null})
   const [currNode, setCurrNode] = useState({children: []})
   const [levelList, setLevelList] = useState<any[]>([])
 
@@ -29,8 +29,6 @@ export default function Studio() {
   function getStoryData(){
     let stortName = params.id as string
     axios.get(`/api/studio/${stortName}`).then(async (res: any) => {
-      console.log("------")
-      console.log(res.data)
       setTreeData(res.data)
     }).catch(err=>{
 
@@ -63,11 +61,9 @@ export default function Studio() {
   }
 
   function updateTreeGraphic(data){
-    console.log("*+++++++")
-    console.log(levelList)
-    console.log(treeData)
     if(!treeData.id) //If first node 
     {
+      //todo: remove image attribute from node and pass image separately?
       let updatedTree = {id: uuidv4(), name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null, image: data.image, imageExt: data.imageExt, ending: data.ending}
       let updatedList = [updatedTree.id]
       updatedTree.children = data.children?.map((val)=>{
@@ -80,12 +76,9 @@ export default function Studio() {
       submitData(updatedTree, updatedTree)
     }
     else{
-      console.log("*******")
-      console.log(data)
-      console.log(treeData)
-      let children =  data?.children.map(val=>Object.assign(val, {id: uuidv4()}) ) || []
+      let children =  data.children?.map(val=>Object.assign(val, {id: uuidv4()}) ) || []
       let updatedSubTree = {id: data.id, name: data.levelName, levelPrompt: data.levelPrompt, children: children || [], parent: null,  image: data.image, imageExt: data.imageExt, ending: data.ending}
-      let updatedList = levelList.concat(data.children.map(v => v.id))
+      let updatedList = levelList.concat(data.children?.map(v => v.id))
       let updatedTree = replaceNodeById(treeData, updatedSubTree, currNode)
       setLevelList(updatedList)
       setTreeData(updatedTree)

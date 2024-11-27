@@ -1,18 +1,13 @@
 
 Finish form logic
-    - Add validation for levelname
-    - Add ending attribute
-    - Photo storage functionality
-    - Story format conversion
+    - Allow story creation with spaces in story name
+    - Fix multiple submissions deleting image
+    - Hide display for loopback option.
     - Add ending logic
     - Add loopback conditional
     - Change save and retrieval to use ID instead of name
 
-Add library page
-Implement Game's dyanamic file retrieval
-Finish story data import logic
 Import prior game page
 Setup story library
     - Setup storage retrieval
 Setup trophy
-Setup electron app

@@ -20,7 +20,7 @@ import { useState, useEffect } from "react";
 export default function StoryForm(props) {
 
   const [options, setOptions] = useState([])
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<any>();
   const [levelName, setLevelName] = useState("")
   const [prompt, setPrompt] = useState("")
   const [ending, setEnding] = useState(false)
@@ -30,7 +30,6 @@ export default function StoryForm(props) {
 
   useEffect(() => {
 
-    console.log(props.nodeSelected)
     setLevelName(props.nodeSelected?.name)
     setPrompt(props.nodeSelected?.levelPrompt || '')
     setOptions(props.nodeSelected?.children)
@@ -49,7 +48,7 @@ export default function StoryForm(props) {
     e.preventDefault()
 
     let imageExt = image?.type === "image/png" ? "png" : "jpeg"; 
-    let levelData = { id:id, levelName: levelName, levelPrompt: prompt, children: options, image: image, imageExt: imageExt,  ending: ending }
+    let levelData = { id: id, levelName: levelName, levelPrompt: prompt, children: options, image: image, imageExt: imageExt,  ending: ending }
 
     if(validate(levelData)){
     props.updateStory(levelData)
@@ -113,7 +112,6 @@ export default function StoryForm(props) {
 
   function handleImageChange(e) {
     let selectedFile = e.target.files[0];
-    console.log(selectedFile)
     setImage(selectedFile);
     setImageDisplay(selectedFile)
   }
