@@ -2,19 +2,27 @@
 import Image from "next/image";
 import { Button } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import platoDungeon from '../library/test1/test1.json'
 import { title, subtitle } from "@/components/primitives";
+import axios from "axios";
 
-export default function Home() {
+export default function Home(props) {
 
-  const [step, setStep] = useState(platoDungeon.start)
-  const [gameMap, setGameMap] = useState(platoDungeon)
+  const [stepId, setStepId] = useState(null)
+  const [gameMap, setGameMap] = useState<any>(null)
   const [promptDisplay, setPromptDisplay] = useState("")
+  const [imageLink, setImageLink] = useState("")
+
   const [popupPrompt, setPopupPrompt] = useState("")
 
-  useEffect(() => {
+  useEffect( () => {
+   
+
+    if(stepId !== null){
+    
+    //types out promt
     let i = 0;
-    const stringResponse = gameMap.steps[step].prompt
+    const stringResponse = gameMap?.levelPrompt
+    console.log(stringResponse)
     const intervalId = setInterval(() => {
       if (i < stringResponse.length + 1) 
       {
@@ -28,32 +36,62 @@ export default function Home() {
     }, 50);
 
     return () => clearInterval(intervalId);
-  }, [step])
+    }
+  }, [stepId])
+
+  useEffect(()=>{
+    getStoryData("test1")
+  }, [])
 
 
+ async function getStoryData(storyName){
+    axios.get(`/api/studio/${storyName}`).then(async (res: any) => {
+        console.log(res.data)
+        setGameMap(res.data)
+        setStepId(res.data.id)
+        setImageLink( `/game-library/${storyName}/${res.data.id}.${res.data.imageExt}`)
+
+
+    }).catch(err=>{
+
+    });
+  }  
+  
   function handleSelection(opt: any) {
-    if (!opt.popupNote) 
+    console.log(opt)
+    if (!opt.loopBack) 
     {
-      setStep(opt.next)
-      setPopupPrompt('')
+        setGameMap(opt)
+        setStepId(opt.id)
+        setImageLink(`/game-library/${"test1"}/${opt.id}.${opt.imageExt}`)
+        setPopupPrompt('')
     }
     else 
     {
-      setPopupPrompt(opt.popupNote)
+        setPopupPrompt(opt.loopBackText)
     }
   }
 
+
   function generateOptions() {
-    if (!gameMap.steps[`${step}`].ending) {
-      return gameMap.steps[`${step}`].options.map((opt: any, i: number) => {
-        return <Button key={i} id={opt.id} value={opt.next} color="primary" variant="ghost" onClick={() => handleSelection(opt)}>{opt.description}</Button>
-      })
-    }
-    else {
-      return <>
-        <Button color="primary" variant="ghost" onClick={() => { window.location.href = '/game' }}>Play Again</Button>
+
+
+    if(gameMap){
+     if (!gameMap?.ending) {
+       return gameMap.children.map((opt: any, i: number) => {
+         return <Button key={opt.id} id={opt.id} value={opt.id} color="primary" variant="ghost" onClick={() => handleSelection(opt)}>{opt.name}</Button>
+       })
+    return <></>
+     }
+     else {
+        return <>
+        <Button color="primary" variant="ghost" onClick={() => { window.location.href = `/game/${"test1"}` }}>Play Again</Button>
         <Button color="primary" variant="ghost" onClick={() => { window.location.href = '/story-library' }}>New Dream</Button>
-      </>
+        </>
+     }
+    }
+    else{
+        return <></>
     }
   }
 
@@ -62,20 +100,14 @@ export default function Home() {
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <div className="inline-block max-w-xl text-center justify-center">
         {/* <h1 className={title()}>Welcome to&nbsp;</h1> */}
-        <h1 className={title({ color: "violet" })}>{gameMap["title"]}&nbsp;</h1>
+        <h1 className={title({ color: "violet" })}>{"test1"}&nbsp;</h1>
         <br />
-      </div>
-
-      <div className="flex gap-3">
-        <p>
-          {gameMap["title"]}
-        </p>
       </div>
 
       <div >
         <Image
           // className={styles.logo}
-          src={`/game-library/test1${gameMap.steps[`${step}`].image}`}
+          src={imageLink}
           alt=""
           width={560}
           height={74}
@@ -83,12 +115,11 @@ export default function Home() {
         />
       </div>
 
-      <div>
+       <div>
         <p>
           {promptDisplay}
         </p>
       </div>
-
       <div>
         <p>
           {popupPrompt}
@@ -97,7 +128,8 @@ export default function Home() {
 
       <div>
         {generateOptions()}
-      </div>
+      </div> 
+
     </section>
 
   );

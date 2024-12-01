@@ -1,8 +1,6 @@
 
 Finish form logic
     - Allow story creation with spaces in story name
-    - Fix multiple submissions deleting image
-    - Hide display for loopback option.
     - Add ending logic
     - Change save and retrieval to use ID instead of name
 
