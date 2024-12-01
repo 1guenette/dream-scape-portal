@@ -24,9 +24,11 @@ import {
   HeartFilledIcon,
   SearchIcon,
   Logo,
+  InstagramIcon,
 } from "@/components/icons";
 
 export const Navbar = () => {
+  console.log(siteConfig.links.instagram)
   const searchInput = (
     <Input
       aria-label="Search"
@@ -80,18 +82,21 @@ export const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
-          <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter}>
+          {/* <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter}>
             <TwitterIcon className="text-default-500" />
           </Link>
           <Link isExternal aria-label="Discord" href={siteConfig.links.discord}>
             <DiscordIcon className="text-default-500" />
-          </Link>
+          </Link> */}
           <Link isExternal aria-label="Github" href={siteConfig.links.github}>
             <GithubIcon className="text-default-500" />
           </Link>
+          <Link isExternal aria-label="Instagram" href={siteConfig.links.instagram}>
+            <InstagramIcon />
+          </Link>
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
+        {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem> */}
         <NavbarItem className="hidden md:flex">
           <Button
             isExternal

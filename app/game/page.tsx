@@ -19,10 +19,9 @@ export default function Home(props) {
 
     if(stepId !== null){
     
-    //types out promt
+    //types out prompt
     let i = 0;
     const stringResponse = gameMap?.levelPrompt
-    console.log(stringResponse)
     const intervalId = setInterval(() => {
       if (i < stringResponse.length + 1) 
       {

@@ -7,7 +7,6 @@ const fs = require('fs');
 
 export async function GET(request: NextRequest, response: NextApiResponse) {
     let list = fs.readdirSync(`public/game-library/`)
-    return NextResponse.json({ list}, { status: 200 });
-
+    return NextResponse.json({list}, { status: 200 });
 }
 

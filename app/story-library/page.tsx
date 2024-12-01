@@ -1,60 +1,32 @@
 "use client"
-import { Link } from "@nextui-org/link";
-import { Snippet } from "@nextui-org/snippet";
-import {  Table, TableHeader, TableBody, TableColumn, TableRow, TableCell, getKeyValue} from "@nextui-org/react";
-import { Code } from "@nextui-org/code";
-import { button as buttonStyles } from "@nextui-org/theme";
-
-import { siteConfig } from "@/config/site";
-import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
+import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell, getKeyValue, Button } from "@nextui-org/react";
+import { title } from "@/components/primitives";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function GameLibrary() {
 
+  const [list, setList] = useState<any>([])
 
-    const rows = [
-        {
-          key: "1",
-          name: "Tony Reichert",
-          creator: "CEO",
-          playCount: "Active",
-        },
-        {
-          key: "2",
-          name: "Zoey Lang",
-          creator: "Technical Lead",
-          status: "Paused",
-        },
-        {
-          key: "3",
-          name: "Jane Fisher",
-          creator: "Senior Developer",
-          status: "Active",
-        },
-        {
-          key: "4",
-          name: "William Howard",
-          creator: "Community Manager",
-          status: "Vacation",
-        },
-      ];
+  useEffect(() => {
+    axios.get('/api/story-library').then((res) => {
+      let list = res.data.list.map((name, i) => { return { key: i, name: name } })
+      setList(list)
+    })
 
+  }, [])
 
-    const columns = [
-        {
-          key: "name",
-          label: "NAME",
-        },
-        {
-          key: "creator",
-          label: "CREATOR",
-        },
-        {
-          key: "playCount",
-          label: "PLAY COUNT",
-        },
-      ];
-    
+  const columns = [
+    {
+      key: "name",
+      label: "NAME",
+    },
+    {
+      key: "playCount",
+      label: "Play",
+    },
+  ];
+
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <div className="inline-block max-w-xl text-center justify-center">
@@ -62,20 +34,27 @@ export default function GameLibrary() {
         <br />
       </div>
 
-      {/* <div className="flex gap-2"> */}
 
-<Table aria-label="Example table with dynamic content">
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-      </TableHeader>
-      <TableBody items={rows}>
-        {(item) => (
-          <TableRow key={item.key}>
-            {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+      <Table aria-label="Example table with dynamic content">
+        <TableHeader columns={columns}>
+          {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+        </TableHeader>
+        <TableBody>
+
+          {
+            list.map(val =>
+              <TableRow key={val.key}>
+                <TableCell>{val.name}</TableCell>
+                <TableCell>
+                  <Button color="primary" variant="ghost" onClick={() => { window.location.href = `/game/${val.name}` }}>Play</Button>
+
+                </TableCell>
+              </TableRow>
+            )
+          }
+
+        </TableBody>
+      </Table>
 
       {/* </div> */}
     </section>
