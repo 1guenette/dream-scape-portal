@@ -2,131 +2,136 @@
 import Image from "next/image";
 import { Button } from "@nextui-org/react";
 import { useEffect, useState } from "react";
+import { title, subtitle } from "@/components/primitives";
+import axios from "axios";
 
-export default function Home(props:any) {
+export default function Home(props) {
 
-    const [step, setStep] = useState(0)
-    const [gameMap, setGameMap] = useState(props)
-    const [gameTitle, setGameTitle] = useState("")
-    const [promptDisplay, setPromptDisplay] = useState("")
-    const [popupPrompt, setPopupPrompt] = useState("")
-    const [imageDisplay, setImageDisplay] = useState("")
+  const [stepId, setStepId] = useState(null)
+  const [gameMap, setGameMap] = useState<any>(null)
+  const [promptDisplay, setPromptDisplay] = useState("")
+  const [imageLink, setImageLink] = useState("")
 
-    useEffect(() => {
+  const [popupPrompt, setPopupPrompt] = useState("")
 
-        if (gameMap.steps) {
+  useEffect( () => {
+   
 
-            setImageDisplay(gameMap.steps[step].image)
+    if(stepId !== null){
+    
+    //types out promt
+    let i = 0;
+    const stringResponse = gameMap?.levelPrompt
+    console.log(stringResponse)
+    const intervalId = setInterval(() => {
+      if (i < stringResponse.length + 1) 
+      {
+        setPromptDisplay(stringResponse.slice(0, i));
+        i++;
+      }
+      else 
+      {
+        clearInterval(intervalId);
+      }
+    }, 50);
 
-            let i = 0;
-            const stringResponse = gameMap.steps[step].prompt
-
-            const intervalId = setInterval(() => {
-                if (i < stringResponse.length + 1) {
-                    setPromptDisplay(stringResponse.slice(0, i));
-                    i++;
-                }
-                else {
-                    clearInterval(intervalId);
-                }
-            }, 50);
-
-
-            return () => clearInterval(intervalId);
-        }
-    }, [step])
-
-    useEffect(() => {
-        fetch(`/api/game/${props.params.id}`).then(async (res) => {
-            let gameJSON = await res.json()
-            setStep(gameJSON.start)
-            setGameMap(gameJSON)
-            setGameTitle(gameJSON.title)
-        })
-
-    }, [props])
-
-
-    function handleSelection(opt: any) {
-        if (!opt.popupNote) {
-            setStep(opt.next)
-            setPopupPrompt('')
-        }
-        else {
-            setPopupPrompt(opt.popupNote)
-        }
+    return () => clearInterval(intervalId);
     }
+  }, [stepId])
 
-    function generateOptions() {
+  useEffect(()=>{
+    console.log("+++++++")
+    getStoryData(props.params.id)
+  }, [])
 
 
-        if (gameMap.steps) {
-            if (!gameMap.steps[`${step}`].ending) {
+ async function getStoryData(storyName){
+    axios.get(`/api/studio/${storyName}`).then(async (res: any) => {
+        console.log(res.data)
+        setGameMap(res.data)
+        setStepId(res.data.id)
+        setImageLink( `/game-library/${storyName}/${res.data.id}.${res.data.imageExt}`)
 
-                return gameMap.steps[`${step}`].options.map((opt:any, i:number) => {
-                    return <Button key={i} id={opt.id} value={opt.next} color="primary" variant="ghost" onClick={() => handleSelection(opt)}>{opt.description}</Button>
-                })
-            }
-            else {
-                return <>
-                    <Button color="primary" variant="ghost" onClick={() => { window.location.href = `${window.location.pathname}` }}>Play Again</Button>
-                    <Button color="primary" variant="ghost" onClick={() => { window.location.href = '/story-library' }}>New Dream</Button>
-                </>
-            }
-        }
+
+    }).catch(err=>{
+
+    });
+  }  
+  
+  function handleSelection(opt: any) {
+    console.log(opt)
+    if (!opt.loopBack) 
+    {
+        setGameMap(opt)
+        setStepId(opt.id)
+        setImageLink(`/game-library/${props.params.id}/${opt.id}.${opt.imageExt}`)
+        setPopupPrompt('')
     }
+    else 
+    {
+        setPopupPrompt(opt.loopBackText)
+    }
+  }
 
 
-    return (
-        <main >
-            <div >
-                 <a
-          href="/"
-          target="_self"
-          rel="noopener noreferrer"
-        >
-          <p>
-            &larr; Lobby
-          </p>
-        </a>
-
-                <p>
-                    {gameTitle}
-                </p>
+  function generateOptions() {
 
 
+    if(gameMap){
+     if (!gameMap?.ending) {
+       return gameMap.children.map((opt: any, i: number) => {
+         return <Button key={opt.id} id={opt.id} value={opt.id} color="primary" variant="ghost" onClick={() => handleSelection(opt)}>{opt.name}</Button>
+       })
+    return <></>
+     }
+     else {
+        return <>
+        <Button color="primary" variant="ghost" onClick={() => { window.location.href = `/game/${props.params.id}` }}>Play Again</Button>
+        <Button color="primary" variant="ghost" onClick={() => { window.location.href = '/story-library' }}>New Dream</Button>
+        </>
+     }
+    }
+    else{
+        return <></>
+    }
+  }
 
-            </div>
+  return (
 
-            <div >
+    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+      <div className="inline-block max-w-xl text-center justify-center">
+        {/* <h1 className={title()}>Welcome to&nbsp;</h1> */}
+        <h1 className={title({ color: "violet" })}>{props.params.id}&nbsp;</h1>
+        <br />
+      </div>
 
-                {imageDisplay ? <Image
-                    // className={styles.logo}
-                    //src={`/game-library/test1/${gameMap?.steps[`${step}`].image}`}
-                    src={imageDisplay}
-                    alt=""
-                    width={560}
-                    height={74}
-                    priority
-                /> : <></>
-                }
-            </div>
+      <div >
+        <Image
+          // className={styles.logo}
+          src={imageLink}
+          alt=""
+          width={560}
+          height={74}
+          priority
+        />
+      </div>
 
-            <div>
-                <p>
-                    {promptDisplay}
-                </p>
-            </div>
+       <div>
+        <p>
+          {promptDisplay}
+        </p>
+      </div>
+      <div>
+        <p>
+          {popupPrompt}
+        </p>
+      </div>
 
-            <div>
-                <p>
-                    {popupPrompt}
-                </p>
-            </div>
+      <div>
+        {generateOptions()}
+      </div> 
 
-            <div>
-                {generateOptions()}
-            </div>
-        </main>
-    );
+    </section>
+
+  );
 }
