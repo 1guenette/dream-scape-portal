@@ -22,7 +22,6 @@ export default function Home(props) {
     //types out promt
     let i = 0;
     const stringResponse = gameMap?.levelPrompt
-    console.log(stringResponse)
     const intervalId = setInterval(() => {
       if (i < stringResponse.length + 1) 
       {
@@ -40,14 +39,12 @@ export default function Home(props) {
   }, [stepId])
 
   useEffect(()=>{
-    console.log("+++++++")
     getStoryData(props.params.id)
   }, [])
 
 
  async function getStoryData(storyName){
     axios.get(`/api/studio/${storyName}`).then(async (res: any) => {
-        console.log(res.data)
         setGameMap(res.data)
         setStepId(res.data.id)
         setImageLink( `/game-library/${storyName}/${res.data.id}.${res.data.imageExt}`)
@@ -59,7 +56,6 @@ export default function Home(props) {
   }  
   
   function handleSelection(opt: any) {
-    console.log(opt)
     if (!opt.loopBack) 
     {
         setGameMap(opt)

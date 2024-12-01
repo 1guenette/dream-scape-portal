@@ -45,7 +45,6 @@ export default function Home(props) {
 
  async function getStoryData(storyName){
     axios.get(`/api/studio/${storyName}`).then(async (res: any) => {
-        console.log(res.data)
         setGameMap(res.data)
         setStepId(res.data.id)
         setImageLink( `/game-library/${storyName}/${res.data.id}.${res.data.imageExt}`)
@@ -57,7 +56,6 @@ export default function Home(props) {
   }  
   
   function handleSelection(opt: any) {
-    console.log(opt)
     if (!opt.loopBack) 
     {
         setGameMap(opt)

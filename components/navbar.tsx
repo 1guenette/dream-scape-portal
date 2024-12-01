@@ -28,7 +28,6 @@ import {
 } from "@/components/icons";
 
 export const Navbar = () => {
-  console.log(siteConfig.links.instagram)
   const searchInput = (
     <Input
       aria-label="Search"

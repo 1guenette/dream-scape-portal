@@ -8,8 +8,6 @@ import { readFileSync } from "fs";
 
    export async function POST(request: NextRequest, response: NextApiResponse) {
 
-    console.log("UPDATING")
-
     let formData = await request.formData()
     
     let storyName = formData.get('storyName')
