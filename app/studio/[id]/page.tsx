@@ -39,11 +39,14 @@ export default function Studio() {
     updateTreeGraphic(levelData)
   }
 
-  function submitData(formData, currNodeData) {
+  function submitData(formData, currNodeData, image) {
     let stortName = params.id as string
 
-    let form = new FormData();    
-    form.append("image", currNodeData.image)
+    let form = new FormData();
+    if(image){
+      form.append("image", image)
+    }
+    //form.append("image", currNodeData.image)
     form.append("levelData", JSON.stringify(currNodeData))
     form.append("fullTreeData", JSON.stringify(formData))
     form.append("storyName", stortName)
@@ -63,7 +66,6 @@ export default function Studio() {
   function updateTreeGraphic(data){
     if(!treeData.id) //If first node 
     {
-      //todo: remove image attribute from node and pass image separately?
       let updatedTree = {id: uuidv4(), name: data.levelName, levelPrompt: data.levelPrompt, children:[], parent: null, image: data.image, imageExt: data.imageExt, ending: data.ending}
       let updatedList = [updatedTree.id]
       updatedTree.children = data.children?.map((val)=>{
@@ -73,17 +75,28 @@ export default function Studio() {
       setTreeData(updatedTree)
       setCurrNode(updatedTree)
       setLevelList(updatedList)
-      submitData(updatedTree, updatedTree)
+
+      let image = data?.image?.name ? data.image : null
+      submitData(updatedTree, updatedTree, image)
     }
     else{
-      let children =  data.children?.map(val=>Object.assign(val, {id: uuidv4()}) ) || []
+      //add new IDs for new options
+      let children =  data.children?.map((val)=>{
+        if (!val.id){
+          return Object.assign(val, {id: uuidv4()})
+        }
+        return val
+      }) || []
+
       let updatedSubTree = {id: data.id, name: data.levelName, levelPrompt: data.levelPrompt, children: children || [], parent: null,  image: data.image, imageExt: data.imageExt, ending: data.ending}
       let updatedList = levelList.concat(data.children?.map(v => v.id))
       let updatedTree = replaceNodeById(treeData, updatedSubTree, currNode)
       setLevelList(updatedList)
       setTreeData(updatedTree)
       setCurrNode(updatedSubTree)
-      submitData(updatedTree, updatedSubTree)
+
+      let image = data?.image?.name ? data.image : null
+      submitData(updatedTree, updatedSubTree, image)
     }
   }
 

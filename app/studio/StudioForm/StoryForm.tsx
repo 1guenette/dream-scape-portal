@@ -20,7 +20,7 @@ import { useState, useEffect } from "react";
 export default function StoryForm(props) {
 
   const [options, setOptions] = useState([])
-  const [image, setImage] = useState<any>();
+  const [image, setImage] = useState<any>(null);
   const [levelName, setLevelName] = useState("")
   const [prompt, setPrompt] = useState("")
   const [ending, setEnding] = useState(false)
@@ -135,7 +135,8 @@ export default function StoryForm(props) {
         pauseOnHover
         theme="dark"
       />
-      <form onSubmit={processSubmission}>
+
+{      !props.nodeSelected.loopBack ? <form onSubmit={processSubmission}>
         <div className="form-group  m-2">
           <p>Level Name:</p>
           <Input name="levelName" type="text" className="form-control" id="levelName" errorMessage="input required" placeholder="Enter Level Name" isRequired value={levelName} onChange={(e) => { setLevelName(e.target.value) }} />
@@ -171,7 +172,7 @@ export default function StoryForm(props) {
         <div className="form-group m-2">
           <Button type="submit" className="btn btn-primary">Save</Button>
         </div>
-      </form>
+      </form>: <p>Loop back prompt, No Input</p>}
       <Divider />
 
     </Card>

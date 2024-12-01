@@ -4,7 +4,6 @@ Finish form logic
     - Fix multiple submissions deleting image
     - Hide display for loopback option.
     - Add ending logic
-    - Add loopback conditional
     - Change save and retrieval to use ID instead of name
 
 Import prior game page

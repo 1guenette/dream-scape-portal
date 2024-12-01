@@ -17,17 +17,28 @@ import { readFileSync } from "fs";
 
     let levelData = JSON.parse(formData.get('levelData') as string) 
     let fullTree = formData.get('fullTreeData')
-    let image = formData.get('image') as File
     
-    const ext = mime.getExtension(mime.getType(image.name) || '')
-    const buffer = Buffer.from(await image.arrayBuffer());
+    if(formData.get('image')){
+        let image = formData.get('image') as File
+        const ext = mime.getExtension(mime.getType(image.name) || '')
+        const buffer = Buffer.from(await image.arrayBuffer());
+        
+        //Removes existing image
+        if(fs.existsSync(`${fileLocation}/${levelData.id}.png`)){
+            await fs.unlinkSync(`${fileLocation}/${levelData.id}.png`);
+        }
+        if(fs.existsSync(`${fileLocation}/${levelData.id}.jpg`)){
+            await fs.unlinkSync(`${fileLocation}/${levelData.id}.jpg`);
+
+        }
+        await fs.writeFileSync(`${fileLocation}/${levelData.id}.${ext}`, buffer)
+    }
     
     if(!fs.existsSync(fileLocation)){
         fs.mkdirSync(fileLocation);
     }
 
     fs.writeFileSync(`${fileLocation}/${storyName}.json`, fullTree)
-    fs.writeFileSync(`${fileLocation}/${levelData.id}.${ext}`, buffer)
     return NextResponse.json({ message: "Info submitted" }, { status: 200 });
 
 }
