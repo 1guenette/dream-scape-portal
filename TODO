@@ -1,9 +1,9 @@
 
 Finish form logic
     - Add ending error handling
-    - Change save and retrieval to use ID instead of name
     - Add security with edit button
 
+Fix image all imagaes to same size
 Setup trophy
-Add delete button to library
 Resolve using dev for hosting
+Add CERTS

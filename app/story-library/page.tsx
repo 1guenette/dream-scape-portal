@@ -1,5 +1,5 @@
 "use client"
-import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell, getKeyValue, Button } from "@nextui-org/react";
+import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell, getKeyValue, Button, Modal, ModalBody, ModalHeader, ModalFooter,ModalContent, useDisclosure } from "@nextui-org/react";
 import { title } from "@/components/primitives";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 export default function GameLibrary() {
 
   const [list, setList] = useState<any>([])
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const [gameSelection, setGameSelection] = useState<any>(null)
 
   useEffect(() => {
     axios.get('/api/story-library').then((res) => {
@@ -18,14 +20,30 @@ export default function GameLibrary() {
 
   const columns = [
     {
-      key: "name",
+      key: "Name",
       label: "NAME",
     },
     {
       key: "playCount",
-      label: "Play",
+      label: "Actions",
     },
   ];
+
+function onDelete(fileName){
+
+  console.log("PUT DELETE FUNCTION HERE")
+  console.log(fileName)
+  axios.delete(`/api/studio/${fileName}`).then((res)=>{
+    setGameSelection(null)
+    let updatedList = list.filter(v => v.name !== fileName )
+    setList(updatedList)
+  })
+  .catch(err=>{
+
+  })
+  
+}
+
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -33,6 +51,32 @@ export default function GameLibrary() {
         <h1 className={title()}>Story Library&nbsp;</h1>
         <br />
       </div>
+
+      <>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Delete Story</ModalHeader>
+              <ModalBody>
+                <p> 
+                  Are you sure you want to delete your story?
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="danger" onPress={onClose} onClick={()=>onDelete(gameSelection)}>
+                  Delete
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
+
 
 
       <Table aria-label="Example table with dynamic content">
@@ -48,6 +92,7 @@ export default function GameLibrary() {
                 <TableCell>
                   <Button color="primary" variant="ghost" onClick={() => { window.location.href = `/game/${val.name}` }}>Play</Button>
                   <Button color="primary" variant="ghost" onClick={() => { window.location.href = `/studio/${val.name}` }}>Edit</Button>
+                  <Button color="danger" variant="ghost"  onClick={()=>setGameSelection(val.name)} onPress={onOpen}>Delete</Button>
                 </TableCell>
               </TableRow>
             )

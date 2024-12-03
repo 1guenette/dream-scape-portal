@@ -28,6 +28,10 @@ import { readFileSync } from "fs";
             await fs.unlinkSync(`${fileLocation}/${levelData.id}.jpg`);
 
         }
+        if(fs.existsSync(`${fileLocation}/${levelData.id}.jpeg`)){
+            await fs.unlinkSync(`${fileLocation}/${levelData.id}.jpeg`);
+
+        }
         await fs.writeFileSync(`${fileLocation}/${levelData.id}.${ext}`, buffer)
     }
     
@@ -49,5 +53,19 @@ export async function GET(request: NextApiRequest, context: { params: { id: stri
     }
     let data = JSON.parse(readFileSync(fileLocation, 'utf-8'))
     return NextResponse.json(data, { status: 200 });
+
+}
+
+
+export async function DELETE(request: NextApiRequest, context: { params: { id: string } }, response: NextApiResponse) {
+    let fileName = context.params.id
+    let fileLocation = `public/game-library/${fileName}`
+    let exists = fs.existsSync(fileLocation)
+    if(!exists){
+        return NextResponse.json(null, { status: 404 });
+    }
+    
+    fs.rmSync(fileLocation, {recursive: true, force: true})
+    return NextResponse.json(`Removed ${fileName}`, { status: 200 });
 
 }
