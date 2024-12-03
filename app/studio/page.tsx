@@ -19,11 +19,11 @@ export default function Home() {
   const [storyName, setStoryName] = useState("")
 
   function updateStoryName(e) {
-    setStoryName(e.target.value)
+    setStoryName(e.target.value.replaceAll(" ", "_"))
   }
 
   function createStudioSession() {
-    if(storyName !== null && storyName?.replaceAll(" ", "")){
+    if(storyName !== null && storyName){
     axios.post(`/api/studio`, { name: storyName }).then(async (res: any) => {
       location.href = `/studio/${storyName}`;
     })
