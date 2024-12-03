@@ -15,6 +15,10 @@ export default function Support() {
         <p>If you'd like to support us, consider a donation</p>
       </div>
 
+      <div>
+        <p>Donations links coming soon</p>
+      </div>
+
     </section>
   );
 }
