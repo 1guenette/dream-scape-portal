@@ -39,7 +39,7 @@ export default function Home(props) {
   }, [stepId])
 
   useEffect(()=>{
-    getStoryData("test1")
+    getStoryData("platos_dungeon")
   }, [])
 
 
@@ -60,7 +60,7 @@ export default function Home(props) {
     {
         setGameMap(opt)
         setStepId(opt.id)
-        setImageLink(`/game-library/${"test1"}/${opt.id}.${opt.imageExt}`)
+        setImageLink(`/game-library/${"platos_dungeon"}/${opt.id}.${opt.imageExt}`)
         setPopupPrompt('')
     }
     else 
@@ -82,7 +82,7 @@ export default function Home(props) {
      }
      else {
         return <>
-        <Button color="primary" variant="ghost" onClick={() => { window.location.href = `/game/${"test1"}` }}>Play Again</Button>
+        <Button color="primary" variant="ghost" onClick={() => { window.location.href = `/game/${"platos_dungeon"}` }}>Play Again</Button>
         <Button color="primary" variant="ghost" onClick={() => { window.location.href = '/story-library' }}>New Dream</Button>
         </>
      }
@@ -97,7 +97,7 @@ export default function Home(props) {
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <div className="inline-block max-w-xl text-center justify-center">
         {/* <h1 className={title()}>Welcome to&nbsp;</h1> */}
-        <h1 className={title({ color: "violet" })}>{"test1"}&nbsp;</h1>
+        <h1 className={title({ color: "violet" })}>{"platos_dungeon"}&nbsp;</h1>
         <br />
       </div>
 
