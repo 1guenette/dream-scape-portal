@@ -107,7 +107,7 @@ export default function Home(props) {
           src={imageLink}
           alt=""
           width={560}
-          height={74}
+          height={560}
           priority
         />
       </div>
