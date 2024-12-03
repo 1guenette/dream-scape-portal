@@ -1,9 +1,7 @@
 
 Finish form logic
-    - Allow story creation with spaces in story name
-    - Add ending logic
+    - Add ending error handling
     - Change save and retrieval to use ID instead of name
+    - Add security with edit button
 
-Setup story library
-    - Setup storage retrieval
 Setup trophy

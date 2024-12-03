@@ -172,7 +172,7 @@ export default function StoryForm(props) {
         <div className="form-group m-2">
           <Button type="submit" className="btn btn-primary">Save</Button>
         </div>
-      </form>: <p>Loop back prompt, No Input</p>}
+      </form>: <p>Loop back prompt, No Input required</p>}
       <Divider />
 
     </Card>

@@ -47,7 +47,7 @@ export default function GameLibrary() {
                 <TableCell>{val.name}</TableCell>
                 <TableCell>
                   <Button color="primary" variant="ghost" onClick={() => { window.location.href = `/game/${val.name}` }}>Play</Button>
-
+                  <Button color="primary" variant="ghost" onClick={() => { window.location.href = `/studio/${val.name}` }}>Edit</Button>
                 </TableCell>
               </TableRow>
             )
