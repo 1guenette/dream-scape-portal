@@ -1,4 +1,3 @@
-   // app/api/[id]/route.ts
    import { NextResponse, NextRequest } from "next/server";
    import { NextApiRequest, NextApiResponse } from 'next'
    import mime from 'mime';
