@@ -16,7 +16,7 @@ export async function POST(request: NextRequest, response: NextApiResponse) {
     }
     else{
         fs.mkdirSync(fileLocation);
-        fs.writeFileSync(`${fileLocation}/${storyName}.json`, '')
+        fs.writeFileSync(`${fileLocation}/${storyName}.json`, '{}')
         return NextResponse.json({ message: "Info submitted" }, { status: 200 });
     }
 
