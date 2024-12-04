@@ -56,7 +56,7 @@ export default function Studio() {
         'Content-Type': 'multipart/form-data'
       }
     }).then(async (res: any) => {
-
+      setCurrNode(currNodeData)
     }).catch(err=>{
 
     });
@@ -72,12 +72,13 @@ export default function Studio() {
         updatedList.push(val.name)
         return {id: uuidv4(), name: val.name, levelPrompt: null, children:[], parent: updatedTree.name, loopBack: val.loopBack, loopBackText: val.loopBackText}
       })
-      setTreeData(updatedTree)
-      setCurrNode(updatedTree)
-      setLevelList(updatedList)
+
 
       let image = data?.image?.name ? data.image : null
       submitData(updatedTree, updatedTree, image)
+      setTreeData(updatedTree)
+      //setCurrNode(updatedTree)
+      setLevelList(updatedList)
     }
     else{
       //add new IDs for new options
@@ -91,12 +92,13 @@ export default function Studio() {
       let updatedSubTree = {id: data.id, name: data.levelName, levelPrompt: data.levelPrompt, children: children || [], parent: null,  image: data.image, imageExt: data.imageExt, ending: data.ending}
       let updatedList = levelList.concat(data.children?.map(v => v.id))
       let updatedTree = replaceNodeById(treeData, updatedSubTree, currNode)
-      setLevelList(updatedList)
-      setTreeData(updatedTree)
-      setCurrNode(updatedSubTree)
+
 
       let image = data?.image?.name ? data.image : null
       submitData(updatedTree, updatedSubTree, image)
+      setLevelList(updatedList)
+      setTreeData(updatedTree)
+      //setCurrNode(updatedSubTree)
     }
   }
 
