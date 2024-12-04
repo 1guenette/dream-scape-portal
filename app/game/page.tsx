@@ -75,7 +75,7 @@ export default function Home(props) {
 
     if(gameMap){
      if (!gameMap?.ending) {
-       return gameMap.children.map((opt: any, i: number) => {
+       return gameMap?.children.map((opt: any, i: number) => {
          return <Button key={opt.id} id={opt.id} value={opt.id} color="primary" variant="ghost" onClick={() => handleSelection(opt)}>{opt.name}</Button>
        })
     return <></>

@@ -21,7 +21,7 @@ export default function Home(props) {
     
     //types out promt
     let i = 0;
-    const stringResponse = gameMap?.levelPrompt
+    const stringResponse = gameMap?.levelPrompt || ""
     const intervalId = setInterval(() => {
       if (i < stringResponse.length + 1) 
       {
@@ -74,11 +74,10 @@ export default function Home(props) {
 
 
     if(gameMap){
-     if (!gameMap?.ending) {
-       return gameMap.children.map((opt: any, i: number) => {
+     if (!gameMap?.ending &&  gameMap?.children?.length > 0) {
+       return gameMap?.children?.map((opt: any, i: number) => {
          return <Button key={opt.id} id={opt.id} value={opt.id} color="primary" variant="ghost" onClick={() => handleSelection(opt)}>{opt.name}</Button>
        })
-    return <></>
      }
      else {
         return <>
