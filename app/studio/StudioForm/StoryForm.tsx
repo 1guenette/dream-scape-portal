@@ -105,7 +105,7 @@ export default function StoryForm(props) {
   }
 
   function updateImageLink(storyName, nodeSelected){
-    let link = `/game-library/${storyName}/${nodeSelected.id}.${nodeSelected.imageExt}`
+    let link = `/game-library/${storyName}/${nodeSelected.id}.png`
     setImageLink(link)
     
   }

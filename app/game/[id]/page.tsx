@@ -47,7 +47,7 @@ export default function Home(props) {
     axios.get(`/api/studio/${storyName}`).then(async (res: any) => {
         setGameMap(res.data)
         setStepId(res.data.id)
-        setImageLink( `/game-library/${storyName}/${res.data.id}.${res.data.imageExt}`)
+        setImageLink( `/game-library/${storyName}/${res.data.id}.png`)
 
 
     }).catch(err=>{
@@ -60,7 +60,7 @@ export default function Home(props) {
     {
         setGameMap(opt)
         setStepId(opt.id)
-        setImageLink(`/game-library/${props.params.id}/${opt.id}.${opt.imageExt}`)
+        setImageLink(`/game-library/${props.params.id}/${opt.id}.png`)
         setPopupPrompt('')
     }
     else 

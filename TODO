@@ -1,7 +1,7 @@
 Add loading icon
-- Add security with edit button
-
+remove image ext property (currently all stored in png)
+Add account management
+    - Add security with edit button
 Fix node spacing
-Fix image all imagaes to same size
 Setup trophy
 Resolve using dev for hosting
