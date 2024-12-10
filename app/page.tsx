@@ -40,7 +40,7 @@ export default function Home() {
         <Link
           isExternal
           className={buttonStyles({ variant: "bordered", radius: "full" })}
-          onClick={() => router.push('/game-library')}
+          onClick={() => router.push('/story-library')}
         >
           Play
         </Link>
