@@ -14,7 +14,6 @@ import { useParams } from 'next/navigation'
 export default function Studio() {
 
   const params = useParams()
-
   const [storyName, setStoryName] = useState(params.id)
   const [treeData, setTreeData] = useState({id:null})
   const [currNode, setCurrNode] = useState({children: []})
@@ -40,7 +39,7 @@ export default function Studio() {
   }
 
   function submitData(formData, currNodeData, image) {
-    let stortName = params.id as string
+    let storyName = params.id as string
 
     let form = new FormData();
     if(image){
@@ -49,9 +48,9 @@ export default function Studio() {
     //form.append("image", currNodeData.image)
     form.append("levelData", JSON.stringify(currNodeData))
     form.append("fullTreeData", JSON.stringify(formData))
-    form.append("storyName", stortName)
+    form.append("storyName", storyName)
 
-    axios.post(`/api/studio/${stortName}`, form, {
+    axios.post(`/api/studio/${storyName}`, form, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -143,14 +142,6 @@ export default function Studio() {
     setCurrNode(nodeSelected)
   }
 
-  const CustomNodeLabel = ({ nodeData }) => {
-    return (
-      <div>
-        {nodeData.name} (Value: {nodeData.id})
-      </div>
-    );
-  };
-
 
 
   return (
@@ -174,7 +165,7 @@ export default function Studio() {
         />
       </div>
       <div className="flex items-center justify-center">
-        <StoryForm nodeSelected={currNode} updateStory={updateStory} levelList={levelList} storyName={storyName}/>
+        <StoryForm nodeSelected={currNode} updateStory={updateStory} levelList={levelList} storyName={storyName} updateCurrNode={updateCurrNode}/>
       </div>
     </main>
   )

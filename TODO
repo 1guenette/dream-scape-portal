@@ -1,5 +1,4 @@
 Add loading icon
-remove image ext property (currently all stored in png)
 Add account management
     - Add security with edit button
 Fix node spacing

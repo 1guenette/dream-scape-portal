@@ -162,7 +162,7 @@ export default function StoryForm(props) {
         <Divider />
 
         <div className="form-check m-2" hidden={ending}>
-          <LevelOptions options={options || []} updateOptions={updateOptions} />
+          <LevelOptions options={options || []} updateOptions={updateOptions} updateCurrNode={props.updateCurrNode} />
         </div>
 
         <div className="form-check m-2">

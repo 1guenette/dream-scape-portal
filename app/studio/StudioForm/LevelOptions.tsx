@@ -78,6 +78,9 @@ useEffect(()=>{
     props.updateOptions(newOptions)
   };
 
+  function redirectOption(n){
+    props.updateCurrNode(n.id)
+  }
 
   return (
     <div>
@@ -107,6 +110,9 @@ useEffect(()=>{
                 <Input type="text" className="form-control" id="levelName" placeholder="Enter option" onChange={(e) => updateLoopBackInput(index, e.target.value)} value={option.loopBackText}/>
               </div>
             </div>
+          </div>
+          <div className="col-start-10 ..." hidden={!option.id || option.loopBack}>
+            <Button color="primary" variant="bordered" onClick={() => redirectOption(options[index])}>Select</Button>
           </div>
           <div className="col-start-11 ...">
             <Button color="danger" variant="bordered" onClick={() => deleteOption(index)}>Delete</Button>
