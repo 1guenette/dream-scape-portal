@@ -25,6 +25,7 @@ export default function StoryForm(props) {
   const [prompt, setPrompt] = useState("")
   const [ending, setEnding] = useState(false)
   const [id, setId] = useState(null)
+  const [parentId, setParentId] = useState(null)
 
   const [imageLink, setImageLink] = useState("")
 
@@ -39,6 +40,7 @@ export default function StoryForm(props) {
     
     //setImageDisplay(props.nodeSelected?.image)
     updateImageLink(props.storyName, props.nodeSelected)
+    setParentId(props.nodeSelected.prevNodeId || null)
 
   }, [props.nodeSelected])
 
@@ -123,6 +125,9 @@ export default function StoryForm(props) {
   return (
     <Card style={{ width: "700px" }}>
       {/* navbar */}
+      <div className="form-group m-2" hidden={!parentId}>
+          <Button color="primary" className="btn btn-primary" variant="bordered" onClick={()=>{props.updateCurrNode(parentId)}}><span>&#8592;</span></Button>
+      </div>
       <ToastContainer
         position="top-right"
         autoClose={2000}

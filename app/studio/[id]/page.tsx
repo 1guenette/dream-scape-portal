@@ -17,7 +17,9 @@ export default function Studio() {
   const [storyName, setStoryName] = useState(params.id)
   const [treeData, setTreeData] = useState({id:null})
   const [currNode, setCurrNode] = useState({children: []})
+  const [prevNod, setPrevNode] = useState(null)
   const [levelList, setLevelList] = useState<any[]>([])
+  const [loadingStatus, setLoadingStatus] = useState<Boolean>(false)
 
   useEffect(()=>{
     getStoryData()
@@ -101,20 +103,17 @@ export default function Studio() {
     }
   }
 
-  function levelsAlreadyExist(){
-
-  }
-
-  function findNode(tree, idSel){
+  function findNode(tree, idSel, prevNode){
 
     if(tree.id === idSel){
+      tree.prevNodeId = prevNode?.id || null
       return tree
     }
     
     if(tree.children && tree.children.length > 0 ){
       
       for (let node of tree.children){
-        const res = findNode(node, idSel)
+        const res = findNode(node, idSel, tree)
         if(res){
           return res
         }
@@ -138,7 +137,7 @@ export default function Studio() {
 
   
   function updateCurrNode(nodeName){
-    let nodeSelected = findNode(treeData, nodeName)
+    let nodeSelected = findNode(treeData, nodeName, null)
     setCurrNode(nodeSelected)
   }
 
@@ -165,7 +164,7 @@ export default function Studio() {
         />
       </div>
       <div className="flex items-center justify-center">
-        <StoryForm nodeSelected={currNode} updateStory={updateStory} levelList={levelList} storyName={storyName} updateCurrNode={updateCurrNode}/>
+        <StoryForm loadingStatus={loadingStatus} nodeSelected={currNode} updateStory={updateStory} levelList={levelList} storyName={storyName} updateCurrNode={updateCurrNode}/>
       </div>
     </main>
   )
