@@ -27,7 +27,7 @@ export async function POST(request: NextRequest, response: NextApiResponse) {
         }
         
         await sharp(buffer).resize(400, 400, { fit: "contain" })
-            .png({ compressionLevel:1 })
+            .png({ compressionLevel:9 })
             .toFile(`${fileLocation}/${levelData.id}.png`)
             .then((res) => {
                 console.log('compressed')
