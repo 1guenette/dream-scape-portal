@@ -1,132 +1,22 @@
-'use client'
-import Image from "next/image";
-import { Button } from "@nextui-org/react";
-import { useEffect, useState } from "react";
-import { title, subtitle } from "@/components/primitives";
-import axios from "axios";
+import { notFound } from "next/navigation";
 
-export default function Home(props) {
+import { loadImageMap, loadStory } from "@/lib/gameLibrary";
 
-  const [stepId, setStepId] = useState(null)
-  const [gameMap, setGameMap] = useState<any>(null)
-  const [promptDisplay, setPromptDisplay] = useState("")
-  const [imageLink, setImageLink] = useState("")
+import GameView from "./GameView";
 
-  const [popupPrompt, setPopupPrompt] = useState("")
+// Stories are written to disk by the studio, so a cached render can be stale.
+export const dynamic = "force-dynamic";
 
-  useEffect( () => {
-   
+export default async function GamePage(props: { params: { id: string } }) {
+  const storyName = props.params.id;
+  const [story, imageMap] = await Promise.all([
+    loadStory(storyName),
+    loadImageMap(storyName),
+  ]);
 
-    if(stepId !== null){
-    
-    //types out promt
-    let i = 0;
-    const stringResponse = gameMap?.levelPrompt || ""
-    const intervalId = setInterval(() => {
-      if (i < stringResponse.length + 1) 
-      {
-        setPromptDisplay(stringResponse.slice(0, i));
-        i++;
-      }
-      else 
-      {
-        clearInterval(intervalId);
-      }
-    }, 50);
-
-    return () => clearInterval(intervalId);
-    }
-  }, [stepId])
-
-  useEffect(()=>{
-    getStoryData(props.params.id)
-  }, [])
-
-
- async function getStoryData(storyName){
-    axios.get(`/api/studio/${storyName}`).then(async (res: any) => {
-        setGameMap(res.data)
-        setStepId(res.data.id)
-        setImageLink( `/game-library/${storyName}/${res.data.id}.png`)
-
-
-    }).catch(err=>{
-
-    });
-  }  
-  
-  function handleSelection(opt: any) {
-    if (!opt.loopBack) 
-    {
-        setGameMap(opt)
-        setStepId(opt.id)
-        setImageLink(`/game-library/${props.params.id}/${opt.id}.png`)
-        setPopupPrompt('')
-    }
-    else 
-    {
-        setPopupPrompt(opt.loopBackText)
-    }
+  if (!story?.id) {
+    notFound();
   }
 
-
-  function generateOptions() {
-
-
-    if(gameMap){
-     if (!gameMap?.ending &&  gameMap?.children?.length > 0) {
-       return gameMap?.children?.map((opt: any, i: number) => {
-         return <Button key={opt.id} id={opt.id} value={opt.id} color="primary" variant="ghost" onClick={() => handleSelection(opt)}>{opt.name}</Button>
-       })
-     }
-     else {
-        return <>
-        <Button color="primary" variant="ghost" onClick={() => { window.location.href = `/game/${props.params.id}` }}>Play Again</Button>
-        <Button color="primary" variant="ghost" onClick={() => { window.location.href = '/story-library' }}>New Dream</Button>
-        </>
-     }
-    }
-    else{
-        return <></>
-    }
-  }
-
-  return (
-
-    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="inline-block max-w-xl text-center justify-center">
-        {/* <h1 className={title()}>Welcome to&nbsp;</h1> */}
-        <h1 className={title({ color: "violet" })}>{props.params.id}&nbsp;</h1>
-        <br />
-      </div>
-
-      <div >
-        <Image
-          // className={styles.logo}
-          src={imageLink}
-          alt=""
-          width={560}
-          height={560}
-          priority
-        />
-      </div>
-
-       <div>
-        <p>
-          {promptDisplay}
-        </p>
-      </div>
-      <div>
-        <p>
-          {popupPrompt}
-        </p>
-      </div>
-
-      <div>
-        {generateOptions()}
-      </div> 
-
-    </section>
-
-  );
+  return <GameView story={story} imageMap={imageMap} storyName={storyName} />;
 }

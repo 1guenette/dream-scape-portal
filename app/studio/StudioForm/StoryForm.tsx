@@ -46,11 +46,10 @@ export default function StoryForm(props) {
 
   function processSubmission(e) {
     
-    //TODO: set and track image type png vs jpeg
     e.preventDefault()
 
-    let imageExt = image?.type === "image/png" ? "png" : "jpeg"; 
-    let levelData = { id: id, levelName: levelName, levelPrompt: prompt, children: options, image: image, imageExt: imageExt,  ending: ending }
+    //uploads are re-encoded to webp server side, whatever was submitted
+    let levelData = { id: id, levelName: levelName, levelPrompt: prompt, children: options, image: image, imageExt: "webp",  ending: ending }
 
     if(validate(levelData)){
     props.updateStory(levelData)
@@ -107,9 +106,16 @@ export default function StoryForm(props) {
   }
 
   function updateImageLink(storyName, nodeSelected){
-    let link = `/game-library/${storyName}/${nodeSelected.id}.png`
+    let link = `/game-library/${storyName}/${nodeSelected.id}.webp`
     setImageLink(link)
     
+  }
+
+  //levels saved before the webp switch still have a .png on disk
+  function fallBackToPng() {
+    if (imageLink.endsWith(".webp")) {
+      setImageLink(imageLink.replace(/\.webp$/, ".png"))
+    }
   }
 
   function handleImageChange(e) {
@@ -160,6 +166,7 @@ export default function StoryForm(props) {
             id="myimage"
             width={300}
             src={imageLink}
+            onError={fallBackToPng}
           />
 
         </div>
