@@ -101,8 +101,12 @@ export default function GameView(props: {
         <br />
       </div>
 
-      <div style={{ width: IMAGE_SIZE, height: IMAGE_SIZE }}>
+      <div
+        className="w-full aspect-square shrink-0"
+        style={{ maxWidth: IMAGE_SIZE }}
+      >
         {imageLink && <Image
+          className="w-full h-full object-contain"
           src={imageLink}
           alt=""
           width={IMAGE_SIZE}
@@ -125,7 +129,7 @@ export default function GameView(props: {
         </p>
       </div>
 
-      <div>
+      <div className="flex flex-wrap items-center justify-center gap-2">
         {generateOptions()}
       </div>
 
